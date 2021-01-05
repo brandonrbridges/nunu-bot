@@ -4,7 +4,7 @@ const { createUser } = require('../functions/database')
 
 module.exports = class MessageListener extends Listener {
     constructor() {
-        super('MessageListener', {
+        super('message', {
             emitter: 'client',
             event: 'message'
         })
