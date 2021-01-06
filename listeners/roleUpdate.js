@@ -13,10 +13,6 @@ module.exports = class RoleUpdateListener extends Listener {
     }
 
     exec(oldRole, newRole) {
-        console.log(oldRole)
-        console.log('\n\n========================\n\n')
-        console.log(newRole)
-        
         // Fetch log channel
         const logChannel = oldRole.guild.channels.cache.find(role => role.name === 'logs')
 
