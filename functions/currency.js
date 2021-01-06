@@ -30,6 +30,66 @@ const addToUserBalance = (discordId, amount) => {
 }
 
 /**
+ * Bet Amount
+ * 
+ * @description Bet amount and win a reward, or sorely use
+ * 
+ * @argument discordId @type String
+ * @argument amount @type Number
+ * 
+ * @version 1.0.0
+ */
+const bet = (discordId, amount) => {
+    return new Promise((resolve, reject) => {
+        // Find user by Discord ID
+        User.findOne({ discordId })
+        .then(user => {
+            // If user, continue
+            if(user) {
+                // Check if user balance is above zero and their bet amount 
+                if(user.currency >= amount && user.currency > 0) {
+                    // Chance of winning
+                    const chance = Math.random() < 0.42 
+
+                    // If user wins
+                    if(chance) {
+                        // Calculate winnings
+                        const winnings = amount * 1.42
+
+                        // Add winnings to user balance
+                        addToUserBalance(discordId, winnings)
+                        .then(balance => {
+                            // Return balance and winnings
+                            return resolve(balance, winnings)
+                        })
+                        .catch(error => {
+                            return reject('ERROR_ADDING_BALANCE')
+                        })
+                    } else {
+                        // If user loses
+                        removeFromUserBalance(discordId, amount)
+                        .then(balance => {
+                            // Return balance
+                            return resolve(balance)
+                        })
+                        .catch(error => {
+                            // Handle error 
+                            return reject('ERROR_REMOVING_BALANCE')
+                        })
+                    }
+                } else {
+                    // If cannot afford, return error
+                    return reject('INSUFFICIENT_FUNDS')
+                }
+            } else {
+                // If not, return error
+                return reject('INVALID_USER')
+            }
+        })
+    })
+}
+
+/**
  * Get User Balance
  * 
  * @description Fetches user balance from the database
@@ -132,6 +192,7 @@ const removeFromUserBalance = (discordId, amount) => {
  * Exports
  */
 module.exports = {
+    bet,
     addToUserBalance,
     getUserBalance,
     giveBalance
