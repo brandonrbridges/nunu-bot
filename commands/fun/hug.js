@@ -29,7 +29,7 @@ module.exports = class HugCommand extends Command {
             embed
             .setAuthor(message.author.username, getAvatarUrl(message.author), null)
             .setColor('#FEFEFE')
-            .setDescription(`${message.author} kissed ${args.member}, das cute :3`)
+            .setDescription(`${message.author} hugged ${args.member}, das cute :3`)
             .setImage(image)
             .setFooter(client.user.username, getAvatarUrl(client.user))
             .setTimestamp()
