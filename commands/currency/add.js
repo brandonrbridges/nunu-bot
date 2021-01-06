@@ -1,6 +1,6 @@
 const { Command } = require('discord-akairo')
 
-const { updateUserBalance } = require('../../functions/currency')
+const { addToUserBalance } = require('../../functions/currency')
 const { formatNumber, getAvatarUrl } = require('../../functions/helpers')
 
 const { MessageEmbed } = require('discord.js')
@@ -28,12 +28,12 @@ module.exports = class AddBalanceCommand extends Command {
         const discordUser = (args.user ? args.user : message.author)
         
         // Update user balance function
-        updateUserBalance(discordUser.id, args.amount)
-        .then(balance => {
+        addToUserBalance(discordUser.id, args.amount)
+        .then(user => {
             // Create embed
             const embed = new MessageEmbed({
                 color: '#ffa801',
-                description: `${message.author} has increased ${discordUser}'s balance! They now have ${formatNumber(balance)}!`,
+                description: `${message.author} has increased ${discordUser}'s balance! They now have ${formatNumber(user.currency)}!`,
                 footer: {
                     iconURL: getAvatarUrl(client.user),
                     text: client.user.username

@@ -19,7 +19,7 @@ const addToUserBalance = (discordId, amount) => {
             
             // Save user and return user
             user.save().then(user => {
-                return resolve(user.currency)
+                return resolve(user)
             })
         })
         .catch(error => {
@@ -47,9 +47,9 @@ const bet = (discordId, amount) => {
             // If user, continue
             if(user) {
                 // Check if user balance is above zero and their bet amount 
-                if(user.currency >= amount && user.currency > 0) {
+                if(user.currency >= amount && user.currency > 0 && amount > 0) {
                     // Chance of winning
-                    const chance = Math.random() < 0.42 
+                    const chance = Math.random() <= 0.42
 
                     // If user wins
                     if(chance) {
@@ -135,10 +135,10 @@ const giveBalance = (giverId, receiverId, amount) => {
             if(giverBalance >= amount && giverBalance > 0 && amount > 0) {
                 // Remove amount from giver balance
                 removeFromUserBalance(giverId, amount)
-                .then(giverBalance => {
+                .then(giver => {
                     // Add amount to receiver
                     addToUserBalance(receiverId, amount)             
-                    .then(receiverBalance => {
+                    .then(receiver => {
                         // Send success
                         return resolve()
                     })
@@ -189,11 +189,44 @@ const removeFromUserBalance = (discordId, amount) => {
 }
 
 /**
+ * Set Balance
+ * 
+ * @description Set user balance in database
+ * 
+ * @argument discordId @type String
+ * @argument amount @type Number
+ * 
+ * @version 1.0.0
+ */
+const setBalance = (discordId, amount) => {
+    return new Promise((resolve, reject) => {
+        // Find user by Discord ID
+        User.findOne({ discordId })
+        .then(user => {
+            // If user exists
+            if(user) {
+                // Set amount
+                user.currency = amount
+
+                // Save user and return
+                user.save().then(user => {
+                    return resolve(user)
+                })
+            } else {
+                // If not
+                return reject('INVALID_USER')
+            }
+        })
+    })
+}
+
+/**
  * Exports
  */
 module.exports = {
     bet,
     addToUserBalance,
     getUserBalance,
-    giveBalance
+    giveBalance,
+    setBalance
 }

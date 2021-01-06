@@ -10,7 +10,7 @@ class Client extends AkairoClient {
     constructor() {
         super({
             // Akairo Settings
-            ownerID: ['471841188341743616', '752212608223805531'],
+            ownerID: ['471841188341743616'],
         }, {
             // Discord.js Settings
             disableMentions: 'everyone'
