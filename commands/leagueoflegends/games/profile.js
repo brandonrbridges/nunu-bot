@@ -1,6 +1,9 @@
 const { Command } = require('discord-akairo')
 
-// const {  } = require('')
+const { fetchUser } = require('../../../functions/database')
+const { getAvatarUrl } = require('../../../functions/helpers')
+
+const { MessageEmbed } = require('discord.js')
 
 module.exports = class ProfileCommand extends Command {
     constructor() {
@@ -19,7 +22,33 @@ module.exports = class ProfileCommand extends Command {
     exec(message, args) {
         fetchUser(args.user.id)
         .then(user => {
+            const embed = new MessageEmbed({
+                color: '#ffa801',
+                description: `${args.user}'s Server Custom Game Profile`,
+                fields: [
+                    {
+                        name: 'Wins',
+                        value: user.wins,
+                        inline: true
+                    },
+                    {
+                        name: 'Losses',
+                        value: user.losses,
+                        inline: true
+                    },
+                    {
+                        name: 'Winrate',
+                        value: 'Coming soon..',
+                        inline: true
+                    },
+                ],
+                footer: {
+                    iconURL: getAvatarUrl(client.user),
+                    text: client.user.username
+                }
+            }).setTimestamp()
 
+            return message.channel.send(embed)
         })
         .catch(error => {
 

@@ -17,77 +17,18 @@ class Client extends AkairoClient {
         })
 
         /**
-         * // ================================================================================== //
          * Command Handlers
-         * // ================================================================================== //
          */
 
-        /**
-         * Moderation Commands
-         * 
-         * @version 1.0.0
-         */
-        this.moderationCommands = new CommandHandler(this, {
-            directory: './commands/moderation/',
+        this.commands = new CommandHandler(this, {
+            directory: './commands/',
             prefix: prefix
         }).loadAll()
 
         /**
-         * Utility Commands
-         * 
-         * @version 1.0.0
-         */
-        this.utilityCommands = new CommandHandler(this, {
-            directory: './commands/utility/',
-            prefix: prefix
-        }).loadAll()
-
-        /**
-         * Currency Commands
-         * 
-         * @version 1.0.0
-         */
-        this.currencyCommands = new CommandHandler(this, {
-            directory: './commands/currency/',
-            prefix: prefix
-        }).loadAll()
-
-        /**
-         * Fun Commands
-         * 
-         * @version 1.0.0
-         */
-        this.funCommands = new CommandHandler(this, {
-            directory: './commands/fun/',
-            prefix: prefix
-        }).loadAll()
-
-        /**
-         * League of Legends Commands
-         * 
-         * @version 1.0.0
-         */
-        this.leagueoflegendsCommands = new CommandHandler(this, {
-            directory: './commands/leagueoflegends/',
-            prefix: prefix
-        }).loadAll()
-
-        /**
-         * League of Legends Game Commands
-         * 
-         * @version 1.0.0
-         */
-        this.leagueoflegendsgamesCommands = new CommandHandler(this, {
-            directory: './commands/leagueoflegends/games',
-            prefix: prefix
-        }).loadAll()
-
-        /**
-         * // ================================================================================== //
          * Listener Handler
-         * // ================================================================================== //
          */
-        this.eventListeners = new ListenerHandler(this, {
+        this.listeners = new ListenerHandler(this, {
             directory: './listeners/'
         }).loadAll()
     }   
