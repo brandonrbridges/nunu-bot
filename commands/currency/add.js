@@ -29,11 +29,11 @@ module.exports = class AddBalanceCommand extends Command {
         
         // Update user balance function
         updateUserBalance(discordUser.id, args.amount)
-        .then(user => {
+        .then(balance => {
             // Create embed
             const embed = new MessageEmbed({
                 color: '#ffa801',
-                description: `${message.author} has increased ${discordUser}'s balance! They now have ${formatNumber(user.currency)}!`,
+                description: `${message.author} has increased ${discordUser}'s balance! They now have ${formatNumber(balance)}!`,
                 footer: {
                     iconURL: getAvatarUrl(client.user),
                     text: client.user.username

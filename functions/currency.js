@@ -1,6 +1,35 @@
 const User = require('../database/schema/user')
 
 /**
+ * Add To User Balance
+ * 
+ * @description Adds amount to user balance 
+ * 
+ * @argument discordId @type String
+ * @argument amount @type Number
+ * 
+ * @version 1.0.0
+ */
+const addToUserBalance = (discordId, amount) => {
+    return new Promise((resolve, reject) => {
+        User.findOne({ discordId })
+        .then(user => {
+            // Add to user balance
+            user.currency = user.currency + amount
+            
+            // Save user and return user
+            user.save().then(user => {
+                return resolve(user.currency)
+            })
+        })
+        .catch(error => {
+            // Return error
+            return reject(error)
+        })
+    })
+}
+
+/**
  * Get User Balance
  * 
  * @description Fetches user balance from the database
@@ -30,31 +59,66 @@ const getUserBalance = (discordId) => {
 }
 
 /**
- * Update User Balance
+ * Give Balance
  * 
- * @description Updates user balance by variable amount
+ * @description Transfers balance from the giver to the receiver
+ * 
+ * @argument discordId @type String
+ * @argument amount @type Number
+ */
+const giveBalance = (giverId, receiverId, amount) => {
+    return new Promise((resolve, reject) => {
+        // Fetch giver balance
+        getUserBalance(giverId)
+        .then(giverBalance => {
+            // Check giver balance is above the amount and 0
+            if(giverBalance >= amount && giverBalance > 0 && amount > 0) {
+                // Remove amount from giver balance
+                removeFromUserBalance(giverId, amount)
+                .then(giverBalance => {
+                    // Add amount to receiver
+                    addToUserBalance(receiverId, amount)             
+                    .then(receiverBalance => {
+                        // Send success
+                        return resolve()
+                    })
+                    .catch(error => {
+                        // Handle error
+                        return reject(error)
+                    })
+                })
+                .catch(error => {
+                    // Handle error
+                    return reject(error)
+                })
+            } else {
+                // Handle error
+                return reject(error)
+            }
+        })
+    })
+}
+
+/**
+ * Remove From User Balance
+ * 
+ * @description Removes amount from user balance 
  * 
  * @argument discordId @type String
  * @argument amount @type Number
  * 
  * @version 1.0.0
  */
-const updateUserBalance = (discordId, amount) => {
+const removeFromUserBalance = (discordId, amount) => {
     return new Promise((resolve, reject) => {
         User.findOne({ discordId })
         .then(user => {
-            // Check if number is positive
-            if(amount > 0) {
-                // Add to user balance
-                user.currency = user.currency + amount
-            } else {
-                // If negative, remove from user balance
-                user.currency = user.current - amount
-            }
+            // Add to user balance
+            user.currency = user.currency - amount
             
             // Save user and return user
             user.save().then(user => {
-                return resolve(user)
+                return resolve(user.currency)
             })
         })
         .catch(error => {
@@ -68,6 +132,7 @@ const updateUserBalance = (discordId, amount) => {
  * Exports
  */
 module.exports = {
+    addToUserBalance,
     getUserBalance,
-    updateUserBalance
+    giveBalance
 }
