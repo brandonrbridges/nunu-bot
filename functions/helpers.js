@@ -1,4 +1,15 @@
 /**
+ * Format Number
+ * 
+ * @description Formats large numbers with commas
+ * 
+ * @argument number @type Number
+ */
+const formatNumber = number => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+/**
  * Get Avatar URL
  * 
  * @description Pieces together the url for a user's avatar
@@ -13,5 +24,6 @@ const getAvatarUrl = user => {
  * Exports
  */
 module.exports = {
-    getAvatarUrl: getAvatarUrl
+    formatNumber,
+    getAvatarUrl
 }

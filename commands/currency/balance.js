@@ -1,14 +1,14 @@
 const { Command } = require('discord-akairo')
 
 const { getUserBalance } = require('../../functions/currency')
-const { getAvatarUrl } = require('../../functions/helpers')
+const { formatNumber, getAvatarUrl } = require('../../functions/helpers')
 
 const { MessageEmbed } = require('discord.js')
 
 module.exports = class BalanceCommand extends Command {
     constructor() {
         super('balance', {
-            aliases: ['balance'],
+            aliases: ['balance', 'bal'],
             args: [
                 {
                     id: 'user',
@@ -26,7 +26,7 @@ module.exports = class BalanceCommand extends Command {
             // Create embed
             const embed = new MessageEmbed({
                 color: '#ffa801',
-                description: `${args.user} has ${balance}`,
+                description: `${args.user} has ${formatNumber(balance)}`,
                 footer: {
                     iconURL: getAvatarUrl(client.user),
                     text: client.user.username
