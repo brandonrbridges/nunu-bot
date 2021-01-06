@@ -35,8 +35,36 @@ const createUser = (discordId) => {
 }
 
 /**
+ * Fetch User
+ * 
+ * @description Fetches user from database using Discord ID
+ * 
+ * @argument discordId @type String
+ */
+const fetchUser = (discordId) => {
+    return new Promise((resolve, reject) => {
+        // Find user by Discord ID
+        User.findOne({ discordId })
+        .then(user => {
+            // If user exists
+            if(user) {
+                // Return user
+                return resolve(user)
+            } else {
+                // Handle error
+                return reject('INVALID_USER')
+            }
+        })
+        .catch(error => {
+            return reject('INVALID')
+        })
+    })
+}
+
+/**
  * Exports
  */
 module.exports = {
-    createUser: createUser
+    createUser,
+    fetchUser
 }
