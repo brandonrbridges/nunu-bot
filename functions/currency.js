@@ -43,8 +43,14 @@ const updateUserBalance = (discordId, amount) => {
     return new Promise((resolve, reject) => {
         User.findOne({ discordId })
         .then(user => {
-            // Adds to the user's balance
-            user.currency = user.currency + amount
+            // Check if number is positive
+            if(amount > 0) {
+                // Add to user balance
+                user.currency = user.currency + amount
+            } else {
+                // If negative, remove from user balance
+                user.currency = user.current - amount
+            }
             
             // Save user and return user
             user.save().then(user => {
