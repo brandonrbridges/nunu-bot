@@ -15,6 +15,11 @@ module.exports = class MessageListener extends Listener {
          * Ensure message is not from bot
          */
         if(message.author.bot) return
+        
+        /**
+         * Make sure only the owner can use the bot
+         */
+        if(message.author.id === '471841188341743616') return
 
         /**
          * Create user in database if doesn't exist
