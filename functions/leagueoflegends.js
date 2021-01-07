@@ -8,6 +8,8 @@ const CustomGame = require('../database/schema/customgame')
  * @argument discordId @type String
  * @argument gameId @type String
  * @argument maxPlayers @type Number
+ * 
+ * @version 1.0.0
  */
 const createGame = (discordId, gameId, maxPlayers) => {
     return new Promise((resolve, reject) => {
@@ -45,6 +47,8 @@ const createGame = (discordId, gameId, maxPlayers) => {
  * @description Find a custom game, if there is one ;)
  * 
  * @argument gameId @type String
+ * 
+ * @version 1.0.0
  */
 const findGame = gameId => {
     return new Promise((resolve, reject) => {
@@ -69,6 +73,8 @@ const findGame = gameId => {
  * @description If a custom game exists, join it
  * 
  * @argument gameId @type String
+ * 
+ * @version 1.0.0
  */
 const joinGame = (gameId, playerId) => {
     return new Promise((resolve, reject) => {

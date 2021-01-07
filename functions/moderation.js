@@ -5,6 +5,8 @@
  * 
  * @argument member @type GuildMember
  * @argument reason @type String
+ * 
+ * @version 1.0.0
  */
 const kickMember = (member, reason) => {
     

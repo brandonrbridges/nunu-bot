@@ -7,6 +7,8 @@ const { MessageEmbed } = require('discord.js')
  * 
  * @argument message @type Object
  * @argument permission @type string
+ * 
+ * @version 1.0.0
  */
 const checkPermissions = (message, permission) => {
     return new Promise((resolve, reject) => {
@@ -40,6 +42,8 @@ const checkPermissions = (message, permission) => {
  * @description Formats large numbers with commas
  * 
  * @argument number @type Number
+ * 
+ * @version 1.0.0
  */
 const formatNumber = number => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -51,6 +55,8 @@ const formatNumber = number => {
  * @description Pieces together the url for a user's avatar
  * 
  * @argument user @type User
+ * 
+ * @version 1.0.0
  */
 const getAvatarUrl = user => {
     return 'https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar

@@ -5,6 +5,8 @@
  * 
  * @argument message @type Object
  * @argument discordId @type String
+ * 
+ * @version 1.0.0
  */
 const fetchInviteCount = (message, discordId) => {
     return new Promise((resolve, reject) => {
