@@ -1,6 +1,7 @@
 const { Command } = require('discord-akairo')
 
 const { fetchUser } = require('../../../functions/database')
+const { calculateWinPercentage } = require('../../../functions/leagueoflegends')
 const { getAvatarUrl } = require('../../../functions/helpers')
 
 const { MessageEmbed } = require('discord.js')

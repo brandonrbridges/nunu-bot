@@ -29,6 +29,10 @@ const schema = new mongoose.Schema({
         default: 0,
         Type: Number
     },
+    gamesPlayed: {
+        default: 0,
+        type: Number
+    },
     wins: {
         default: 0,
         type: Number

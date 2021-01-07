@@ -1,6 +1,17 @@
 const CustomGame = require('../database/schema/customgame')
 
 /**
+ * Calculate Win Percentage
+ * 
+ * @description Calculates user win percentage
+ * 
+ * @argument discordId @type String
+ */
+const calculateWinPercentage = discordId => {
+    
+}
+
+/**
  * Create Custom Game
  * 
  * @description Create a custom game for players to join
