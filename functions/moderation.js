@@ -1,4 +1,17 @@
 /**
+ * Add Infraction
+ * 
+ * @description Adds an infraction
+ * 
+ * @argument discordId @type String
+ * @argument reason @type String
+ * @argument infractionType @type String
+ */
+const createInfraction = (discordId, reason, infractionType) => {
+    
+}
+
+/**
  * Ban Member
  * 
  * @description Bans a member from the guild with a reason
@@ -58,5 +71,9 @@ const warnMember = (member, reason) => {
  * Export
  */
 module.exports = {
-    kickMember
+    createInfraction,
+    banMember,
+    kickMember,
+    softbanMember,
+    warnMember
 }
