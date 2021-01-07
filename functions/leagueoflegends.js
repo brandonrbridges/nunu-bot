@@ -5,7 +5,9 @@ const CustomGame = require('../database/schema/customgame')
  * 
  * @description Create a custom game for players to join
  * 
- * @argument
+ * @argument discordId @type String
+ * @argument gameId @type String
+ * @argument maxPlayers @type Number
  */
 const createGame = (discordId, gameId, maxPlayers) => {
     return new Promise((resolve, reject) => {
@@ -26,6 +28,7 @@ const createGame = (discordId, gameId, maxPlayers) => {
                     return resolve(game)
                 })
             } else {
+                // Return error
                 return reject('GAME_ALREADY_EXISTS')
             }
         })
@@ -67,7 +70,7 @@ const findGame = gameId => {
  * 
  * @argument gameId @type String
  */
-const joinGame = gameId = playerId => {
+const joinGame = (gameId, playerId) => {
     return new Promise((resolve, reject) => {
         // Find Custom Game
         findGame({ gameId })
@@ -96,5 +99,6 @@ const joinGame = gameId = playerId => {
  */
 module.exports = {
     createGame,
-    findGame
+    findGame,
+    joinGame
 }
