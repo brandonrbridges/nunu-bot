@@ -4,6 +4,10 @@ const { AkairoClient, CommandHandler, ListenerHandler } = require('discord-akair
 
 const mongoose = require('mongoose')
 
+const cron = require('node-cron')
+
+const { resetDailies } = require('./functions/currency')
+
 const prefix = ','
 
 class Client extends AkairoClient {
@@ -48,6 +52,12 @@ mongoose.connect(process.env.DATABASE, { useFindAndModify: false, useNewUrlParse
 .catch(error => {
     console.error('== ! UNABLE TO CONNECT TO DATABASE ! ==')
     console.error(error)
+})
+
+// Setup cron job to run every hour
+cron.schedule('0 * * * *', () => {
+    // Reset user daily usage
+    resetDailies()
 })
 
 /**

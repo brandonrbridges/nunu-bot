@@ -1,6 +1,27 @@
 const User = require('../database/schema/user')
 
 /**
+ * Add Daily Amount
+ * 
+ * @description Add to user gold count
+ * 
+ * @argument discordId @type String
+ * 
+ * @version 1.0.0
+ */
+const addDailyAmount = discordId => {
+    // Find user by Discord ID
+    User.findOne({ discordId })
+    .then(user => {
+        // Add amount
+        user.gold = user.gold + 500
+        
+        // Save user
+        user.save()
+    })
+}
+
+/**
  * Add To User Balance
  * 
  * @description Adds amount to user balance 
@@ -15,7 +36,7 @@ const addToUserBalance = (discordId, amount) => {
         User.findOne({ discordId })
         .then(user => {
             // Add to user balance
-            user.currency = user.currency + amount
+            user.gold = user.gold + amount
             
             // Save user and return user
             user.save().then(user => {
@@ -47,7 +68,7 @@ const bet = (discordId, amount) => {
             // If user, continue
             if(user) {
                 // Check if user balance is above zero and their bet amount 
-                if(user.currency >= amount && user.currency > 0 && amount > 0) {
+                if(user.gold >= amount && user.gold > 0 && amount > 0) {
                     // Chance of winning
                     const chance = Math.random() <= 0.42
 
@@ -90,6 +111,39 @@ const bet = (discordId, amount) => {
 }
 
 /**
+ * Check Daily Used
+ * 
+ * @description Check if user has used daily
+ * 
+ * @argument discordId @type String
+ * 
+ * @version 1.0.0
+ */
+const hasUsedDaily = discordId => {
+    return new Promise(resolve => {
+        // Find user by Discord ID
+        User.findOne({ discordId })
+        .then(user => {
+            // If user
+            if(user) {
+                // Send boolean
+                if(!user.hasUsedDaily) {
+                    // Return false
+                    resolve(false)
+
+                    // Set daily boolean to true and save
+                    user.hasUsedDaily = true
+                    return user.save()
+                } else {
+                    // Return true
+                    return resolve(true)
+                }
+            }
+        })
+    })
+}
+
+/**
  * Get User Balance
  * 
  * @description Fetches user balance from the database
@@ -105,7 +159,7 @@ const getUserBalance = (discordId) => {
         .then(user => {
             if(user) {
                 // If user, return balance
-                return resolve(user.currency)
+                return resolve(user.gold)
             } else {
                 // If no user, return error
                 return reject('INVALID_USER')
@@ -174,17 +228,42 @@ const removeFromUserBalance = (discordId, amount) => {
         User.findOne({ discordId })
         .then(user => {
             // Add to user balance
-            user.currency = user.currency - amount
+            user.gold = user.gold - amount
             
             // Save user and return user
             user.save().then(user => {
-                return resolve(user.currency)
+                return resolve(user.gold)
             })
         })
         .catch(error => {
             // Return error
             return reject(error)
         })
+    })
+}
+
+/**
+ * Reset Daily Usage
+ * 
+ * @description Resets every users daily boolean
+ * 
+ * @version 1.0.0
+ */
+const resetDailies = () => {
+    // Find all users that have used daily
+    User.find({ hasUsedDaily: true })
+    .then(users => {
+        // If there are users
+        if(users) {
+            // Loop through users
+            users.forEach(user => {
+                // Set daily to false
+                user.hasUsedDaily = false
+
+                // Save user
+                user.save()
+            })
+        }
     })
 }
 
@@ -206,7 +285,7 @@ const setBalance = (discordId, amount) => {
             // If user exists
             if(user) {
                 // Set amount
-                user.currency = amount
+                user.gold = amount
 
                 // Save user and return
                 user.save().then(user => {
@@ -224,9 +303,12 @@ const setBalance = (discordId, amount) => {
  * Exports
  */
 module.exports = {
+    addDailyAmount,
     bet,
     addToUserBalance,
+    hasUsedDaily,
     getUserBalance,
     giveBalance,
+    resetDailies,
     setBalance
 }

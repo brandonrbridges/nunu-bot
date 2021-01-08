@@ -33,7 +33,7 @@ module.exports = class AddBalanceCommand extends Command {
             // Create embed
             const embed = new MessageEmbed({
                 color: '#ffa801',
-                description: `${message.author} has increased ${discordUser}'s balance! They now have ${formatNumber(user.currency)}!`,
+                description: `${message.author} has increased ${discordUser}'s balance! They now have ${formatNumber(user.gold)}!`,
                 footer: {
                     iconURL: getAvatarUrl(client.user),
                     text: client.user.username

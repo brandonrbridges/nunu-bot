@@ -25,7 +25,7 @@ module.exports = class ProfileCommand extends Command {
         .then(user => {
             const embed = new MessageEmbed({
                 color: '#ffa801',
-                description: `${args.user}'s Server Custom Game Profile`,
+                description: `${args.user}'s Server Profile`,
                 fields: [
                     {
                         name: 'Wins',
@@ -42,6 +42,21 @@ module.exports = class ProfileCommand extends Command {
                         value: 'Coming soon..',
                         inline: true
                     },
+                    {
+                        name: 'Gold',
+                        value: user.gold,
+                        inline: true
+                    },
+                    {
+                        name: 'Blue Essence',
+                        value: user.blueEssence,
+                        inline: true
+                    },
+                    {
+                        name: 'Orange Essence',
+                        value: user.orangeEssence,
+                        inline: true
+                    }
                 ],
                 footer: {
                     iconURL: getAvatarUrl(client.user),
