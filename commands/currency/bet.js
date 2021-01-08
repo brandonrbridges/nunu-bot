@@ -25,7 +25,7 @@ module.exports = class BetCommand extends Command {
             // Create embed
             const embed = new MessageEmbed({
                 color: '#ffa801',
-                description: `${args.user} has won ${formatNumber(winnings)}! They now have ${balance}.`,
+                description: `${args.user} has won ${formatNumber(winnings)} Gold! They now have ${balance} Gold.`,
                 footer: {
                     iconURL: getAvatarUrl(client.user),
                     text: client.user.username

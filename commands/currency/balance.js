@@ -26,7 +26,7 @@ module.exports = class BalanceCommand extends Command {
             // Create embed
             const embed = new MessageEmbed({
                 color: '#ffa801',
-                description: `${args.user} has ${formatNumber(balance)}`,
+                description: `${args.user} has ${formatNumber(balance)} Gold`,
                 footer: {
                     iconURL: getAvatarUrl(client.user),
                     text: client.user.username

@@ -32,7 +32,7 @@ module.exports = class SetBalanceCommand extends Command {
                 // Create embed
                 const embed = new MessageEmbed({
                     color: '#0be881',
-                    description: `${message.author} has set ${args.user}'s balance to ${formatNumber(args.amount)}!`,
+                    description: `${message.author} has set ${args.user}'s Gold to ${formatNumber(args.amount)}!`,
                     footer: {
                         iconURL: getAvatarUrl(client.user),
                         text: client.user.username
