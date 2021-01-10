@@ -54,10 +54,23 @@ mongoose.connect(process.env.DATABASE, { useFindAndModify: false, useNewUrlParse
     console.error(error)
 })
 
-// Setup cron job to run every hour
+/**
+ * Cron Job 
+ * 
+ * @description Runs hourly to see if the user has used the daily command
+ */
 cron.schedule('0 * * * *', () => {
     // Reset user daily usage
     resetDailies()
+})
+
+/**
+ * Cron Job
+ * 
+ * @description Runs every minute to check if the user has sent a message and gained XP
+ */
+cron.schedule('* * * * *', () => {
+
 })
 
 /**

@@ -1,7 +1,5 @@
 const { Listener } = require('discord-akairo')
 
-const { getAvatarUrl } = require('../functions/helpers')
-
 const { MessageEmbed } = require('discord.js')
 
 module.exports = class GuildMemberAddListener extends Listener {
@@ -13,6 +11,6 @@ module.exports = class GuildMemberAddListener extends Listener {
     }
 
     exec(member) {
-        console.log(member)
+        // createUser(member.id)
     }
 }

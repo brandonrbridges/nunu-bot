@@ -1,23 +1,16 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
-    gameId: {
-        required: true,
-        type: String
-    },
-    hostId: {
-        required: true,
-        type: String
-    },
     isActive: {
         default: true,
         type: Boolean
     },
     maxPlayers: {
+        default: 10,
         required: true,
         type: Number
     },
-    playersJoined: {
+    players: {
         default: [],
         type: Array
     },

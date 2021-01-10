@@ -29,11 +29,11 @@ module.exports = class MessageDeleteListener extends Listener {
                     value: message.author,
                     inline: true
                 },
-                {
-                    name: 'Channel',
-                    value: message.channel,
-                    inline: true
-                },
+                // {
+                //     name: 'Channel',
+                //     value: message.channel,
+                //     inline: true
+                // },
                 {
                     name: 'Content',
                     value: message.content,

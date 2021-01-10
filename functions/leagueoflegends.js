@@ -1,121 +1,152 @@
+/**
+ * Schema
+ */
+const { CategoryChannel } = require('discord.js')
 const CustomGame = require('../database/schema/customgame')
 
 /**
- * Calculate Win Percentage
- * 
- * @description Calculates user win percentage
- * 
- * @argument discordId @type String
+ * Helpers
  */
-const calculateWinPercentage = discordId => {
-    
-}
+const { embedConsoleError, embedError, embedStandard, embedSuccess, removeFromArray } = require('./helpers')
 
 /**
  * Create Custom Game
  * 
  * @description Create a custom game for players to join
  * 
- * @argument discordId @type String
- * @argument gameId @type String
- * @argument maxPlayers @type Number
- * 
  * @version 1.0.0
  */
-const createGame = (discordId, gameId, maxPlayers) => {
-    return new Promise((resolve, reject) => {
-        // Find game
-        findGame(gameId)
-        .then(game => {
-            // If no game
-            if(!game) {
-                // Create and save game
-                new CustomGame({
-                    hostId: discordId,
-                    gameId: gameId,
-                    maxPlayers: maxPlayers
-                })
-                .save()
-                .then(game => {
-                    // Return game
-                    return resolve(game)
-                })
-            } else {
-                // Return error
-                return reject('GAME_ALREADY_EXISTS')
-            }
-        })
-        .catch(error => {
-            // Error handling
-            return reject(error)
-        })
-    })
+const createCustom = async (message) => {
+    try {
+        const existingGame = await CustomGame.findOne({ isActive: true })
+
+        if(!existingGame) {
+            await new CustomGame().save()
+
+            const embed = embedSuccess(`A custom game has been created!`)
+            return message.channel.send(embed)
+        } else {
+            const embed = embedError('An active custom game already exists.')
+            return message.channel.send(embed)
+        }
+    } catch(error) {
+        const embed = embedConsoleError(error)
+        return message.channel.send(embed)
+    }
 }
 
 /**
- * Find Custom Game
+ * Delete Custom Game
  * 
- * @description Find a custom game, if there is one ;)
- * 
- * @argument gameId @type String
+ * @description Deletes custom game if one exists
  * 
  * @version 1.0.0
  */
-const findGame = gameId => {
-    return new Promise((resolve, reject) => {
-        // Find Custom Game
-        CustomGame.findOne({ gameId })
-        .then(game => {
-            // If there is a game
-            if(game) {
-                // Return game
-                return resolve(game)
-            } else {
-                // Return null if no game found
-                return reject(null)
-            }
-        })
-    })
+const deleteCustom = async (message) => {
+    try {
+        const game = await CustomGame.findOne({ isActive: true })
+
+        if(game) {
+            await game.delete()
+
+            const embed = embedSuccess('The active custom game has been deleted!')
+            return message.channel.send(embed)
+        } else {
+            const embed = embedError('There was no active custom game found to delete.')
+            return message.channel.send(embed)
+        }
+    } catch(error) {
+        const embed = embedConsoleError(error)
+        return message.channel.send(embed)
+    }
 }
 
 /**
  * Join Custom Game
  * 
- * @description If a custom game exists, join it
- * 
- * @argument gameId @type String
+ * @description Joins custom game if one exists
  * 
  * @version 1.0.0
  */
-const joinGame = (gameId, playerId) => {
-    return new Promise((resolve, reject) => {
-        // Find Custom Game
-        findGame({ gameId })
-        .then(game => {
-            // If player not in array
-            if(!game.players.includes(playerId)) {
-                // Add player ID to players array and save
-                game.players.push(playerId).save().then(game => {
-                    // Return game
-                    return resolve(game)
-                })
+const joinCustom = async (message) => {
+    try {
+        const game = await CustomGame.findOne({ isActive: true })
+        const discordId = message.author.id
+
+        if(game) {
+            if(!game.players.includes(discordId)) {
+                if(game.players <= game.maxPlayers) {
+                    try {
+                        await game.players.push(discordId)
+                        await game.save()
+
+                        const embed = embedSuccess(`${message.author}, you have joined the custom game!`)
+                        return message.channel.send(embed)
+                    } catch(error) {
+                        const embed = embedConsoleError(error)
+                        return message.channel.send(embed)
+                    }
+                } else {
+                    const embed = embedError(`${message.author}, the game appears to already be full! There are ${game.maxPlayers} players in the custom game.`)
+                    return message.channel.send(embed)    
+                }
             } else {
-                // Return error
-                return reject('PLAYER_ALREADY_JOINED')
+                const embed = embedError(`${message.author}, you are already participating in the custom game.`)
+                return message.channel.send(embed)
             }
-        })
-        .catch(error => {
-            // Error handling
-            return reject(error)
-        })
-    })
+        } else {
+            const embed = embedError('There are no active custom games at the moment.')
+            return message.channel.send(embed)
+        }
+    } catch(error) {
+        const embed = embedConsoleError(error)
+        return message.channel.send(embed)
+    }
+}
+
+/**
+ * Leave Custom Game
+ * 
+ * @description Leave custom game if one exists
+ * 
+ * @version 1.0.0
+ */
+const leaveCustom = async (message) => {
+    try {
+        const game = await CustomGame.findOne({ isActive: true }) 
+
+        if(game) {
+            if(game.players.includes(message.author.id)) {
+                try {
+                    game.players = await removeFromArray(game.players, message.author.id)
+                    await game.save()
+    
+                    const embed = embedSuccess('You have left the custom game!')
+                    return message.channel.send(embed)
+                } catch(error) {
+                    const embed = embedConsoleError(error)
+                    return message.channel.send(embed)
+                }
+            } else {
+                const embed = embedError(`${message.author}, you are currently not listed in the custom game.`)
+                return message.channel.send(embed)
+            }
+        } else {
+            const embed = embedError('There are no active custom games at the moment.')
+            return message.channel.send(embed)
+        }
+    } catch(error) {
+        const embed = embedConsoleError(error)
+        return message.channel.send(embed)
+    }
 }
 
 /**
  * Export
  */
 module.exports = {
-    createGame,
-    findGame,
-    joinGame
+    createCustom,
+    deleteCustom,
+    joinCustom,
+    leaveCustom
 }
