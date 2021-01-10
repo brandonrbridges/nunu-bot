@@ -60,7 +60,7 @@ const profile = async (message, discordId) => {
         if(user) {
             const embed = new MessageEmbed({
                 color: '#ffa801',
-                description: `${discordUser}'s Server Profile\n[CG] stands for Custom Games`,
+                description: `${discordUser}'s Server Profile`,
                 fields: [
                     {
                         name: 'Level',
@@ -93,17 +93,17 @@ const profile = async (message, discordId) => {
                         inline: true
                     },
                     {
-                        name: '[CG] Wins',
+                        name: 'Wins',
                         value: user.wins,
                         inline: true
                     },
                     {
-                        name: '[CG] Losses',
+                        name: 'Losses',
                         value: user.losses,
                         inline: true
                     },
                     {
-                        name: '[CG] Winrate',
+                        name: 'Winrate',
                         value: Math.round((user.wins / user.gamesPlayed * 100) / 1) + '%',
                         inline: true
                     },
