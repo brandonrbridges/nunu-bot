@@ -70,6 +70,10 @@ const schema = new mongoose.Schema({
     hasUsedDaily: {
         default: false,
         type: Boolean
+    },
+    canEarnExperience: {
+        default: true,
+        type: Boolean
     }
 })
 

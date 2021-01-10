@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const cron = require('node-cron')
 
 const { resetDailies } = require('./functions/currency')
+const { resetExperienceGain } = require('./functions/levelling')
 
 const prefix = ','
 
@@ -70,7 +71,8 @@ cron.schedule('0 * * * *', () => {
  * @description Runs every minute to check if the user has sent a message and gained XP
  */
 cron.schedule('* * * * *', () => {
-
+    // Resets the ability to gain XP to true
+    resetExperienceGain()
 })
 
 /**

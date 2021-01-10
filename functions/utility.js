@@ -63,6 +63,21 @@ const profile = async (message, discordId) => {
                 description: `${discordUser}'s Server Profile\n[CG] stands for Custom Games`,
                 fields: [
                     {
+                        name: 'Level',
+                        value: user.level,
+                        inline: true
+                    },
+                    {
+                        name: 'Experience',
+                        value: user.experience,
+                        inline: true
+                    },
+                    {
+                        name: 'Placeholder',
+                        value: 'null',
+                        inline: true
+                    },
+                    {
                         name: 'Gold',
                         value: user.gold,
                         inline: true
