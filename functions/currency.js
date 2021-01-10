@@ -118,7 +118,7 @@ const bet = async (message, amount) => {
 
                     if(chance) {
                         await User.findOneAndUpdate({ discordId }, { gold: user.gold + winnings}, { new: true })
-
+                        
                         const embed = embedSuccess(`${message.author}, **you won ${winnings} Gold!** You now have ${user.gold} Gold.`)
                         return message.channel.send(embed)
                     } else {
