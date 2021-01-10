@@ -1,4 +1,13 @@
+/**
+ * Schema
+ */
 const User = require('../database/schema/user')
+
+/**
+ * Helpers
+ */
+const { embedConsoleError, embedError, embedStandard, embedSuccess, removeFromArray } = require('./helpers')
+
 
 /**
  * Add Daily Amount
@@ -60,54 +69,131 @@ const addToUserBalance = (discordId, amount) => {
  * 
  * @version 1.0.0
  */
-const bet = (discordId, amount) => {
-    return new Promise((resolve, reject) => {
-        // Find user by Discord ID
-        User.findOne({ discordId })
-        .then(user => {
-            // If user, continue
-            if(user) {
-                // Check if user balance is above zero and their bet amount 
-                if(user.gold >= amount && user.gold > 0 && amount > 0) {
-                    // Chance of winning
-                    const chance = Math.random() <= 0.42
+// const bet = (discordId, amount) => {
+//     return new Promise((resolve, reject) => {
+//         // Find user by Discord ID
+//         User.findOne({ discordId })
+//         .then(user => {
+//             // If user, continue
+//             if(user) {
+//                 // Check if user balance is above zero and their bet amount 
+//                 if(user.gold >= amount && user.gold > 0 && amount > 0) {
+//                     // Chance of winning
+//                     const chance = Math.random() <= 0.42
 
-                    // If user wins
+//                     // If user wins
+//                     if(chance) {
+//                         // Calculate winnings
+//                         const winnings = amount * 1.42
+
+//                         // Add winnings to user balance
+//                         addToUserBalance(discordId, winnings)
+//                         .then(balance => {
+//                             // Return balance and winnings
+//                             return resolve(balance, winnings)
+//                         })
+//                         .catch(error => {
+//                             return reject('ERROR_ADDING_BALANCE')
+//                         })
+//                     } else {
+//                         // If user loses
+//                         removeFromUserBalance(discordId, amount)
+//                         .then(balance => {
+//                             // Return balance
+//                             return resolve(balance)
+//                         })
+//                         .catch(error => {
+//                             // Handle error 
+//                             return reject('ERROR_REMOVING_BALANCE')
+//                         })
+//                     }
+//                 } else {
+//                     // If cannot afford, return error
+//                     return reject('INSUFFICIENT_FUNDS')
+//                 }
+//             } else {
+//                 // If not, return error
+//                 return reject('INVALID_USER')
+//             }
+//         })
+//     })
+// }
+
+const bet = async (message, amount) => {
+    try {
+        const discordId = message.author.id
+        const user = await User.findOne({ discordId })
+
+        if(user) {
+            if(amount > 0) {
+                if(user.gold >= amount) {
+                    let chance, winnings
+
+                    if(amount <= 50) {
+                        chance = Math.random() < 0.88
+                        winnings = amount * 1.34
+                    }
+
+                    if(amount <= 100) {
+                        chance = Math.random() < 0.77
+                        winnings = amount * 1.40
+                    }
+
+                    if(amount <= 200) {
+                        chance = Math.random() < 0.66
+                        winnings = amount * 1.44
+                    }
+
+                    if(amount <= 500) {
+                        chance = Math.random() < 0.55
+                        winnings = amount * 1.48
+                    }
+
+                    if(amount <= 1000) {
+                        chance = Math.random() < 0.44
+                        winnings = amount * 1.52
+                    }
+
+                    if(amount <= 2000) {
+                        chance = Math.random() < 0.33
+                        winnings = amount * 1.56
+                    }
+
+                    if(amount >= 2001) {
+                        chance = Math.random() < 0.26
+                        winnings = amount * 1.88
+                    }
+
+                    winnings = Math.round(winnings)
+
                     if(chance) {
-                        // Calculate winnings
-                        const winnings = amount * 1.42
+                        await User.findOneAndUpdate({ discordId }, { gold: user.gold + winnings}, { new: true })
 
-                        // Add winnings to user balance
-                        addToUserBalance(discordId, winnings)
-                        .then(balance => {
-                            // Return balance and winnings
-                            return resolve(balance, winnings)
-                        })
-                        .catch(error => {
-                            return reject('ERROR_ADDING_BALANCE')
-                        })
+                        const embed = embedSuccess(`${message.author}, **you won ${winnings} Gold!** You now have ${user.gold} Gold.`)
+                        return message.channel.send(embed)
                     } else {
-                        // If user loses
-                        removeFromUserBalance(discordId, amount)
-                        .then(balance => {
-                            // Return balance
-                            return resolve(balance)
-                        })
-                        .catch(error => {
-                            // Handle error 
-                            return reject('ERROR_REMOVING_BALANCE')
-                        })
+                        await User.findOneAndUpdate({ discordId }, { gold: user.gold - amount }, { new: true })
+                        
+                        const embed = embedError(`${message.author}, **you lost ${amount} Gold!** Better luck next time.`)
+                        return message.channel.send(embed)
                     }
                 } else {
-                    // If cannot afford, return error
-                    return reject('INSUFFICIENT_FUNDS')
+                    const embed = embedError(`${message.author}, you do not have enough Gold to bet this amount!\nYou currently have ${user.gold} Gold.`)
+                    return message.channel.send(embed)
                 }
             } else {
-                // If not, return error
-                return reject('INVALID_USER')
+                const embed = embedError(`${message.author}, you have to bet 1 Gold or more!`)
+                return message.channel.send(embed)
             }
-        })
-    })
+        } else {
+            const embed = embedError(`There is no listing in the database for ${message.author}! Speak to V about this.`)
+            return message.channel.send(embed)
+        }
+    } catch(error) {
+        console.error(error)
+        const embed = embedConsoleError(error)
+        return message.channel.send(embed)
+    }
 }
 
 /**

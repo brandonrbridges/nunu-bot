@@ -1,7 +1,6 @@
 /**
  * Schema
  */
-const { CategoryChannel } = require('discord.js')
 const CustomGame = require('../database/schema/customgame')
 
 /**
