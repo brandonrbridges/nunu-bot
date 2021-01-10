@@ -1,6 +1,6 @@
 const { Listener } = require('discord-akairo')
 
-const { MessageEmbed } = require('discord.js')
+const { createUser } = require('../functions/database')
 
 module.exports = class GuildMemberAddListener extends Listener {
     constructor() {
@@ -11,6 +11,7 @@ module.exports = class GuildMemberAddListener extends Listener {
     }
 
     exec(member) {
-        // createUser(member.id)
+        // Add user to database
+        createUser(member.id)
     }
 }
