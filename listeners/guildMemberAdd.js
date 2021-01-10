@@ -2,6 +2,8 @@ const { Listener } = require('discord-akairo')
 
 const { createUser } = require('../functions/database')
 
+const { MessageEmbed } = require('discord.js')
+
 module.exports = class GuildMemberAddListener extends Listener {
     constructor() {
         super('guildMemberAdd', {
@@ -17,6 +19,7 @@ module.exports = class GuildMemberAddListener extends Listener {
         const channel = member.guild.systemChannel
 
         const embed = new MessageEmbed({
+            color: '#0be881',
             description: `${member} has joined the server! Welcome to ${member.guild.name}!`,
         }).setTimestamp()
 
