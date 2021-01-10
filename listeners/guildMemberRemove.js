@@ -14,5 +14,14 @@ module.exports = class GuildMemberRemoveListener extends Listener {
 
     exec(member) {
         console.log(member)
+
+        const channel = member.guild.systemChannel
+
+        const embed = new MessageEmbed({
+            color: '#f53b57',
+            description: `${member} has left the server! Farewell, our old friend!`,
+        }).setTimestamp()
+
+        channel.send(embed)
     }
 }
