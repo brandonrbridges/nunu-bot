@@ -69,56 +69,6 @@ const addToUserBalance = (discordId, amount) => {
  * 
  * @version 1.0.0
  */
-// const bet = (discordId, amount) => {
-//     return new Promise((resolve, reject) => {
-//         // Find user by Discord ID
-//         User.findOne({ discordId })
-//         .then(user => {
-//             // If user, continue
-//             if(user) {
-//                 // Check if user balance is above zero and their bet amount 
-//                 if(user.gold >= amount && user.gold > 0 && amount > 0) {
-//                     // Chance of winning
-//                     const chance = Math.random() <= 0.42
-
-//                     // If user wins
-//                     if(chance) {
-//                         // Calculate winnings
-//                         const winnings = amount * 1.42
-
-//                         // Add winnings to user balance
-//                         addToUserBalance(discordId, winnings)
-//                         .then(balance => {
-//                             // Return balance and winnings
-//                             return resolve(balance, winnings)
-//                         })
-//                         .catch(error => {
-//                             return reject('ERROR_ADDING_BALANCE')
-//                         })
-//                     } else {
-//                         // If user loses
-//                         removeFromUserBalance(discordId, amount)
-//                         .then(balance => {
-//                             // Return balance
-//                             return resolve(balance)
-//                         })
-//                         .catch(error => {
-//                             // Handle error 
-//                             return reject('ERROR_REMOVING_BALANCE')
-//                         })
-//                     }
-//                 } else {
-//                     // If cannot afford, return error
-//                     return reject('INSUFFICIENT_FUNDS')
-//                 }
-//             } else {
-//                 // If not, return error
-//                 return reject('INVALID_USER')
-//             }
-//         })
-//     })
-// }
-
 const bet = async (message, amount) => {
     try {
         const discordId = message.author.id
