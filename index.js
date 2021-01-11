@@ -58,9 +58,9 @@ mongoose.connect(process.env.DATABASE, { useFindAndModify: false, useNewUrlParse
 /**
  * Cron Job 
  * 
- * @description Runs hourly to see if the user has used the daily command
+ * @description Runs at midnight to see if the user has used the daily command
  */
-cron.schedule('0 * * * *', () => {
+cron.schedule('0 0 * * *', () => {
     // Reset user daily usage
     resetDailies()
 })

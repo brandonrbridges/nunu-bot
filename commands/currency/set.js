@@ -1,9 +1,16 @@
+// Akairo
 const { Command } = require('discord-akairo')
 
-const { setBalance } = require('../../functions/currency')
-const { checkPermissions, formatNumber, getAvatarUrl } = require('../../functions/helpers')
+// Mongoose
+const User = require('../../database/schema/user')
 
-const { MessageEmbed } = require('discord.js')
+// Functions
+const { 
+    embedConsoleError,
+    embedSuccess,
+    formatNumber,
+    checkPermissions
+} = require('../../functions/helpers')
 
 module.exports = class SetBalanceCommand extends Command {
     constructor() {
@@ -22,29 +29,20 @@ module.exports = class SetBalanceCommand extends Command {
         })
     }
 
-    exec(message, args) {
-        // Check balance
-        checkPermissions(message, 'ADMINISTRATOR')
-        .then(() => {
-            // Set user balance
-            setBalance(args.user.id, args.amount)
-            .then(() => {
-                // Create embed
-                const embed = new MessageEmbed({
-                    color: '#0be881',
-                    description: `${message.author} has set ${args.user}'s Gold to ${formatNumber(args.amount)}!`,
-                    footer: {
-                        iconURL: getAvatarUrl(client.user),
-                        text: client.user.username
-                    }
-                }).setTimestamp()
+    async exec(message, { user, amount }) {
+        const discordId = user.id
+        const permitted = checkPermissions(message, 'ADMINISTRATOR')
 
-                // Send embed
+        try {
+            if(permitted) {
+                await User.findOneAndUpdate({ discordId }, { $set: { gold: amount } }, { new: true })
+                
+                const embed = embedSuccess(`💰 ${message.author} has set ${user}'s balance to ${formatNumber(amount)} Gold!`)
                 return message.channel.send(embed)
-            })
-        })
-        .catch(embed => {
-            return message.channel.send(embed)
-        })
+            }
+        } catch(error) {
+            const embed = embedConsoleError(error)
+            return message.chanel.send(embed)
+        }
     }
 }

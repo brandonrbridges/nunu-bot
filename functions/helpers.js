@@ -10,30 +10,18 @@ const { MessageEmbed } = require('discord.js')
  * 
  * @version 1.0.0
  */
-const checkPermissions = (message, permission) => {
-    return new Promise((resolve, reject) => {
-        // Set member constant
-        const member = message.member
-
-        // Check member permission
-        if(member.hasPermission(permission)) {
-            // Proceed if they have permission
-            return resolve()
+const checkPermissions = async (message, permission) => {
+    try {
+        if(message.member.hasPermission(permission)) {
+            return true
         } else {
-            // If they don't have permission, create embed
-            const embed = new MessageEmbed({
-                color: '#f53b57',
-                description: `${message.author}, you are not allowed to use this command!`,
-                footer: {
-                    iconURL: getAvatarUrl(client.user),
-                    text: client.user.username
-                }
-            }).setTimestamp()
-
-            // Send embed through rejection
-            return reject(embed)
+            const embed = embedError(`⛔ ${message.user}, you are not allowed to use this command.`)
+            return message.channel.send(embed)
         }
-    })
+    } catch(error) {
+        const embed = embedConsoleError(error)
+        return message.channel.send(embed)
+    }
 }
 
 /**

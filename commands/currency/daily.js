@@ -1,9 +1,18 @@
+// Akairo
 const { Command } = require('discord-akairo')
 
-const { addDailyAmount, hasUsedDaily } = require('../../functions/currency')
-const { getAvatarUrl } = require('../../functions/helpers')
+// Mongoose
+const User = require('../../database/schema/user')
 
-const { MessageEmbed } = require('discord.js')
+// Functions
+const { 
+    embedConsoleError,
+    embedSuccess,
+    embedError
+} = require('../../functions/helpers')
+
+// Moment
+const moment = require('moment')
 
 module.exports = class DailyCommand extends Command {
     constructor() {
@@ -12,41 +21,26 @@ module.exports = class DailyCommand extends Command {
         })
     }
 
-    exec(message) {
-        // Check daily
-        hasUsedDaily(message.author.id)
-        .then(used => {
-            // If not used
-            if(!used) {
-                // Add daily amount
-                addDailyAmount(message.author.id)
-                
-                // Create embed
-                const embed = new MessageEmbed({
-                    color: '#0be881',
-                    description: `💰 ${message.author}, 500 Gold has been added to your balance!`,
-                    footer: {
-                        iconURL: getAvatarUrl(client.user),
-                        text: client.user.username
-                    }
-                }).setTimestamp()
+    async exec(message) {
+        const discordId = message.author.id
+        
+        try {
+            const user = await User.findOne({ discordId })
 
-                // Send embed
+            if(!user.hasUsedDaily) {
+                const amount = 500
+                await User.findOneAndUpdate({ discordId }, { $inc: { gold: amount }, $set: { hasUsedDaily: true } }, { new: true })
+
+                const embed = embedSuccess(`💰 ${message.author}, ${amount} Gold has been added to your balance!`)
                 return message.channel.send(embed)
             } else {
-                // Create embed
-                const embed = new MessageEmbed({
-                    color: '#f53b57',
-                    description: `⛔ ${message.author}, you have already used daily today!`,
-                    footer: {
-                        iconURL: getAvatarUrl(client.user),
-                        text: client.user.username
-                    }
-                }).setTimestamp()
-
-                // Send embed
+                const remainingTime = moment().endOf('day').fromNow('true')
+                const embed = embedError(`⛔ ${message.author}, you have already used daily today! Please wait ${remainingTime}.`)
                 return message.channel.send(embed)
             }
-        })
+        } catch(error) {
+            const embed = embedConsoleError(error)
+            return message.channel.send(embed)
+        }
     }
 }
