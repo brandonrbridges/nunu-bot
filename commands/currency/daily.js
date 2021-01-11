@@ -24,7 +24,7 @@ module.exports = class DailyCommand extends Command {
                 // Create embed
                 const embed = new MessageEmbed({
                     color: '#0be881',
-                    description: `${message.author}, 500 Gold has been added to your balance!`,
+                    description: `💰 ${message.author}, 500 Gold has been added to your balance!`,
                     footer: {
                         iconURL: getAvatarUrl(client.user),
                         text: client.user.username
@@ -37,7 +37,7 @@ module.exports = class DailyCommand extends Command {
                 // Create embed
                 const embed = new MessageEmbed({
                     color: '#f53b57',
-                    description: `${message.author}, you have already used daily today!`,
+                    description: `⛔ ${message.author}, you have already used daily today!`,
                     footer: {
                         iconURL: getAvatarUrl(client.user),
                         text: client.user.username
