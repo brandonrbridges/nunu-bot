@@ -18,16 +18,8 @@ const { embedConsoleError, embedError, embedStandard, embedSuccess, removeFromAr
  * 
  * @version 1.0.0
  */
-const addDailyAmount = discordId => {
-    // Find user by Discord ID
-    User.findOne({ discordId })
-    .then(user => {
-        // Add amount
-        user.gold = user.gold + 500
-        
-        // Save user
-        user.save()
-    })
+const addDailyAmount = async (discordId) => {
+    await User.findOneAndUpdate({ discordId }, { $inc: { gold: 500 } })
 }
 
 /**
