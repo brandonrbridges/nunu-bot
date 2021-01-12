@@ -20,10 +20,10 @@ module.exports = class CreateCustomGameCommand extends Command {
     
     async exec(message) { 
         try {
-            const existing = await CustomGame.findOne({ isActive: true })
+            const existing = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })
     
             if(!existing) {
-                await new CustomGame().save()
+                await new CustomGame({ guildId: message.guild.id }).save()
     
                 const embed = embedSuccess(`🕹️ A custom game has been created!`)
                 return message.channel.send(embed)

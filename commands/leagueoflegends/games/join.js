@@ -21,25 +21,26 @@ module.exports = class JoinCustomGameCommand extends Command {
     async exec(message) { 
         try {
             const discordId = message.author.id
-            let game = await CustomGame.findOne({ isActive: true })
+            let game = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })
     
             if(game) {
                 if(!game.players.includes(discordId)) {
                     if(game.players.length <= 10) {
-                        game = await CustomGame.findOneAndUpdate({ isActive: true }, { $push: { players: discordId } }, { new: true })
-                        
-                        const embed = embedSuccess(`🕹️ ${message.author}, you have joined the custom game!`)
+                        await CustomGame.findOneAndUpdate({ guildId: message.guild.id, isActive: true }, { $push: { players: discordId } }, { new: true })
+                        game = await CustomGame.findOne({ guildId: message.guild.id, isActive: true }) 
+
+                        const embed = embedSuccess(`🕹️ ${message.author}, you have joined the custom game!`).addFields({ name: 'In Lobby', value: game.players.length, inline: true }, { name: 'Remaining Spots', value: (10 - game.players.length), inline: true })
                         return message.channel.send(embed)
                     } else {
-                        const embed = embedError(` ${message.author}, the game appears to already be full! There are ${game.maxPlayers} players in the custom game.`)
+                        const embed = embedError(` ${message.author}, the game appears to already be full! There are 10 players in the custom game.`)
                         return message.channel.send(embed)    
                     }
                 } else {
-                    const embed = embedError(`🕹️ ${message.author}, you are already participating in the custom game.`)
+                    const embed = embedError(`${message.author}, you are already participating in the custom game.`)
                     return message.channel.send(embed)
                 }
             } else {
-                const embed = embedError(`🕹️ ${message.author}, there are no active custom games at the moment.`)
+                const embed = embedError(`${message.author}, there are no active custom games at the moment.`)
                 return message.channel.send(embed)
             }
         } catch(error) {

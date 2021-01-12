@@ -20,7 +20,7 @@ module.exports = class DeleteCustomGameCommand extends Command {
 
     async exec(message) {
         try {
-            const game = await CustomGame.findOne({ isActive: true })
+            const game = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })
     
             if(game) {
                 await game.delete()

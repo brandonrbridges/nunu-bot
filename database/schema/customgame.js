@@ -1,8 +1,16 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
+    guildId: {
+        required: true,
+        type: String
+    },
     isActive: {
         default: true,
+        type: Boolean
+    },
+    inProgress: {
+        default: false,
         type: Boolean
     },
     maxPlayers: {
@@ -23,7 +31,7 @@ const schema = new mongoose.Schema({
         type: Array
     },
     winningTeam: {
-        type: String
+        type: Number
     }
 })
 

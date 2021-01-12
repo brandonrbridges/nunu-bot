@@ -9,6 +9,8 @@ const cron = require('node-cron')
 const { resetDailies } = require('./functions/currency')
 const { resetExperienceGain } = require('./functions/levelling')
 
+const CustomGame = require('./database/schema/customgame')
+
 const prefix = ','
 
 class Client extends AkairoClient {
@@ -73,6 +75,16 @@ cron.schedule('0 0 * * *', () => {
 cron.schedule('* * * * *', () => {
     // Resets the ability to gain XP to true
     resetExperienceGain()
+})
+
+/**
+ * Cron Job
+ * 
+ * @description Runs at 7pm everyday and creates a server wide custom game
+ */
+cron.schedule('0 19 * * *', () => {
+    // Create custom game
+    // const guild = client.guilds
 })
 
 /**
