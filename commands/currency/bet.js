@@ -92,7 +92,7 @@ module.exports = class BetCommand extends Command {
                     return message.channel.send(embed)
                 }
             } else {
-                const embed = embedError(`⛔ There is no listing in the database for ${message.author}! Speak to V about this.`)
+                const embed = embedError(`There is no listing in the database for ${message.author}! Speak to V about this.`)
                 return message.channel.send(embed)
             }
         } catch(error) {

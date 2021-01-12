@@ -12,10 +12,10 @@ const {
     checkPermissions
 } = require('../../functions/helpers')
 
-module.exports = class SetBalanceCommand extends Command {
+module.exports = class RewardBalanceCommand extends Command {
     constructor() {
-        super('setbalance', {
-            aliases: ['setbalance', 'setbal', 'set'],
+        super('rewardbalance', {
+            aliases: ['rewardbalance', 'rewardbal', 'reward'],
             args: [
                 {
                     id: 'user',
@@ -35,9 +35,9 @@ module.exports = class SetBalanceCommand extends Command {
 
         try {
             if(permitted) {
-                await User.findOneAndUpdate({ discordId }, { $set: { gold: amount } }, { new: true })
+                const db = await User.findOneAndUpdate({ discordId }, { $inc: { gold: amount } }, { new: true })
                 
-                const embed = embedSuccess(`💰 ${message.author} has set ${user}'s balance to ${formatNumber(amount)} Gold!`)
+                const embed = embedSuccess(`💰 ${user}, you have been rewarded ${formatNumber(amount)} Gold!\n\nYou now have ${db.gold} Gold!`)
                 return message.channel.send(embed)
             }
         } catch(error) {

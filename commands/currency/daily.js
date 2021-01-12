@@ -37,7 +37,7 @@ module.exports = class DailyCommand extends Command {
                 const remainingHours = moment().endOf('day').fromNow('true')
                 const remainingMinutes = moment().endOf('hour').fromNow('true')
 
-                const embed = embedError(`⛔ ${message.author}, you have already used daily today! Please wait ${remainingHours} ${remainingMinutes}.`)
+                const embed = embedError(`${message.author}, you have already used daily today! Please wait ${remainingHours} ${remainingMinutes}.`)
                 return message.channel.send(embed)
             }
         } catch(error) {
