@@ -2,7 +2,12 @@ const { Listener } = require('discord-akairo')
 
 const { createUser } = require('../functions/database')
 const { addExperience, checkXp } = require('../functions/levelling')
-const { getAvatarUrl } = require('../functions/helpers')
+const { 
+    embedStandard,
+    getAvatarUrl,
+    embedError,
+    embedConsoleError
+} = require('../functions/helpers')
 
 const { MessageEmbed } = require('discord.js')
 
@@ -41,6 +46,18 @@ module.exports = class MessageListener extends Listener {
 
                 message.channel.send(embed)
             }
+        }
+
+        // Jess approves
+        if(message.author.id === '165134266659766272' && message.content === 'https://tenor.com/view/tohru-kobayashisan-chi-no-maid-dragon-dragon-maid-thumbs-up-gif-12390446') {
+            const embed = embedStandard(`✅ Jess approves!`)
+            return message.channel.send(embed)
+        }
+
+        // Igni memes
+        if(message.author.id === '513048504487378964' && message.content === 'guys im gonna only ask once' && message.channel.name !== 'memes') {
+            const embed = embedStandard(`${message.author} has spoken! Keep memes out of ${message.channel}!`)
+            return message.channel.send(embed)
         }
     }
 }

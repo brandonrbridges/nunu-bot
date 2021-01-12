@@ -32,6 +32,8 @@ module.exports = class WinCustomGameCommand extends Command {
 
             if(game) {
                 if(game.inProgress) {
+                    message.delete()
+                    
                     let winners = []
                     
                     if(winningTeam === 1) {

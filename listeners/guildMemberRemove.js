@@ -13,8 +13,6 @@ module.exports = class GuildMemberRemoveListener extends Listener {
     }
 
     exec(member) {
-        console.log(member)
-
         const channel = member.guild.systemChannel
 
         const embed = new MessageEmbed({
