@@ -116,7 +116,7 @@ const profile = async (message, discordId) => {
 
             return message.channel.send(embed)
         } else {
-            const embed = embedError('No user found in the database with that ID.')
+            const embed = embedError('⛔ No user found in the database with that ID.')
             return message.channel.send(embed)
         }
     } catch(error) {

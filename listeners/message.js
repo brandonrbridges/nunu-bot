@@ -1,5 +1,6 @@
 const { Listener } = require('discord-akairo')
 
+const { createUser } = require('../functions/database')
 const { addExperience, checkXp } = require('../functions/levelling')
 const { getAvatarUrl } = require('../functions/helpers')
 
@@ -16,6 +17,9 @@ module.exports = class MessageListener extends Listener {
     exec(message) {
         // Ensure messages are not from bot
         if(message.author.bot) return
+
+        // Add user to database
+        createUser(message.author.id)
         
         // Add experience for message sent
         addExperience(message.author.id)
