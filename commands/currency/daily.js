@@ -34,8 +34,10 @@ module.exports = class DailyCommand extends Command {
                 const embed = embedSuccess(`💰 ${message.author}, ${amount} Gold has been added to your balance!`)
                 return message.channel.send(embed)
             } else {
-                const remainingTime = moment().endOf('day').fromNow('true')
-                const embed = embedError(`⛔ ${message.author}, you have already used daily today! Please wait ${remainingTime}.`)
+                const remainingHours = moment().endOf('day').fromNow('true')
+                const remainingMinutes = moment().endOf('hour').fromNow('true')
+
+                const embed = embedError(`⛔ ${message.author}, you have already used daily today! Please wait ${remainingHours} ${remainingMinutes}.`)
                 return message.channel.send(embed)
             }
         } catch(error) {
