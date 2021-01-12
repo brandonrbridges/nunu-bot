@@ -1,9 +1,17 @@
+// Akairo
 const { Command } = require('discord-akairo')
 
-const { getUserBalance } = require('../../functions/currency')
-const { formatNumber, getAvatarUrl } = require('../../functions/helpers')
+// Mongoose
+const User = require('../../database/schema/user')
 
-const { MessageEmbed } = require('discord.js')
+// Functions
+const { 
+    embedConsoleError,
+    embedError,
+    embedStandard,
+    embedSuccess,
+    formatNumber,
+} = require('../../functions/helpers')
 
 module.exports = class BalanceCommand extends Command {
     constructor() {
@@ -19,22 +27,22 @@ module.exports = class BalanceCommand extends Command {
         })
     }
 
-    exec(message, args) {
-        // Get user balance
-        getUserBalance(args.user.id)
-        .then(balance => {
-            // Create embed
-            const embed = new MessageEmbed({
-                color: '#ffa801',
-                description: `${args.user} has ${formatNumber(balance)} Gold`,
-                footer: {
-                    iconURL: getAvatarUrl(client.user),
-                    text: client.user.username
-                }
-            }).setTimestamp()
+    async exec(message, { user }) {
+        try {
+            const discordId = user.id
+            const member = message.guild.members.cache.get(discordId)
+            const db = await User.findOne({ discordId })
 
-            // Send embed
+            if(member && db) {
+                const embed = embedStandard(`💰 ${member}'s Server Balance`).addFields({ name: 'Gold', value: db.gold, inline: true }, { name: 'Blue Essence', value: db.blueEssence, inline: true }, { name: 'Orange Essence', value: db.orangeEssence, inline: true })
+                return message.channel.send(embed)
+            } else {
+                const embed = embedError(`There was an error fetching that user's profile.`)
+                return message.channel.send(embed)
+            }
+        } catch(error) {
+            const embed = embedConsoleError(error)
             return message.channel.send(embed)
-        })
+        }
     }
 }
