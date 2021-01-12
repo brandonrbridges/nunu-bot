@@ -25,7 +25,7 @@ module.exports = class CreateCustomGameCommand extends Command {
             if(!existing) {
                 await new CustomGame().save()
     
-                const embed = embedSuccess(`🎮 A custom game has been created!`)
+                const embed = embedSuccess(`🕹️ A custom game has been created!`)
                 return message.channel.send(embed)
             } else {
                 const embed = embedError('An active custom game already exists.')

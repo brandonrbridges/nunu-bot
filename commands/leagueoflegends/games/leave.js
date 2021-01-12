@@ -28,18 +28,18 @@ module.exports = class LeaveCustomGameCommand extends Command {
                     try {
                         await CustomGame.findOneAndUpdate({ isActive: true }, { $pull: { players: discordId } }, { new: true })
         
-                        const embed = embedSuccess(`🎮 ${message.author}, you have left the custom game!`)
+                        const embed = embedSuccess(`🕹️ ${message.author}, you have left the custom game!`)
                         return message.channel.send(embed)
                     } catch(error) {
                         const embed = embedConsoleError(error)
                         return message.channel.send(embed)
                     }
                 } else {
-                    const embed = embedError(`🎮 ${message.author}, you are currently not listed in the custom game.`)
+                    const embed = embedError(`🕹️ ${message.author}, you are currently not listed in the custom game.`)
                     return message.channel.send(embed)
                 }
             } else {
-                const embed = embedError(`🎮 ${message.author}, there are no active custom games at the moment.`)
+                const embed = embedError(`🕹️ ${message.author}, there are no active custom games at the moment.`)
                 return message.channel.send(embed)
             }
         } catch(error) {

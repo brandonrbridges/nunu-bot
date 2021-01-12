@@ -25,7 +25,7 @@ module.exports = class DeleteCustomGameCommand extends Command {
             if(game) {
                 await game.delete()
     
-                const embed = embedSuccess(`🎮 ${message.author}, the active custom game has been deleted!`)
+                const embed = embedSuccess(`🕹️ ${message.author}, the active custom game has been deleted!`)
                 return message.channel.send(embed)
             } else {
                 const embed = embedError(`${message.author}, there was no active custom game found to delete.`)

@@ -28,18 +28,18 @@ module.exports = class JoinCustomGameCommand extends Command {
                     if(game.players.length <= 10) {
                         game = await CustomGame.findOneAndUpdate({ isActive: true }, { $push: { players: discordId } }, { new: true })
                         
-                        const embed = embedSuccess(`🎮 ${message.author}, you have joined the custom game!`)
+                        const embed = embedSuccess(`🕹️ ${message.author}, you have joined the custom game!`)
                         return message.channel.send(embed)
                     } else {
                         const embed = embedError(` ${message.author}, the game appears to already be full! There are ${game.maxPlayers} players in the custom game.`)
                         return message.channel.send(embed)    
                     }
                 } else {
-                    const embed = embedError(`🎮 ${message.author}, you are already participating in the custom game.`)
+                    const embed = embedError(`🕹️ ${message.author}, you are already participating in the custom game.`)
                     return message.channel.send(embed)
                 }
             } else {
-                const embed = embedError(`🎮 ${message.author}, there are no active custom games at the moment.`)
+                const embed = embedError(`🕹️ ${message.author}, there are no active custom games at the moment.`)
                 return message.channel.send(embed)
             }
         } catch(error) {
