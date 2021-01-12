@@ -9,7 +9,6 @@ const {
     embedConsoleError,
     embedError,
     embedStandard,
-    embedSuccess,
     formatNumber,
 } = require('../../functions/helpers')
 
@@ -34,7 +33,7 @@ module.exports = class BalanceCommand extends Command {
             const db = await User.findOne({ discordId })
 
             if(member && db) {
-                const embed = embedStandard(`💰 ${member}'s Server Balance`).addFields({ name: 'Gold', value: db.gold, inline: true }, { name: 'Blue Essence', value: db.blueEssence, inline: true }, { name: 'Orange Essence', value: db.orangeEssence, inline: true })
+                const embed = embedStandard(`💰 ${member}'s Server Balance`).addFields({ name: 'Gold', value: formatNumber(db.gold), inline: true }, { name: 'Blue Essence', value: formatNumber(db.blueEssence), inline: true }, { name: 'Orange Essence', value: formatNumber(db.orangeEssence), inline: true })
                 return message.channel.send(embed)
             } else {
                 const embed = embedError(`There was an error fetching that user's profile.`)
