@@ -14,11 +14,11 @@ const checkPermissions = async (message, permission) => {
     if(message.member.hasPermission(permission)) {
         return true
     } else {
-        const embed = embedError(`⛔ ${message.member}, you are not allowed to use this command.`)
+        const embed = embedError(`${message.member}, you are not allowed to use this command.`)
         message.channel.send(embed)
 
         return false
-    }re
+    }
 }
 
 /**

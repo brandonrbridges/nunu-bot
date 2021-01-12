@@ -191,15 +191,7 @@ const removeFromUserBalance = (discordId, amount) => {
  * @version 1.0.0
  */
 const resetDailies = async () => {
-    const users = await User.find({ hasUsedDaily: true })
-    users.forEach(async user => {
-        try {
-            await User.findOneAndUpdate({ discordId: user.discordId }, { hasUsedDaily: false }, { new: true })
-        } catch(error) {
-            const embed = embedConsoleError(error)
-            return message.channel.send(embed)
-        }
-    })
+    
 }
 
 /**

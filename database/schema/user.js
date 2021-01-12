@@ -25,10 +25,6 @@ const schema = new mongoose.Schema({
         type: Boolean
     },
     // League of Legends Games
-    timesPlayed: {
-        default: 0,
-        Type: Number
-    },
     gamesPlayed: {
         default: 0,
         type: Number
@@ -54,6 +50,10 @@ const schema = new mongoose.Schema({
         default: 0,
         type: Number
     },
+    canEarnExperience: {
+        default: true,
+        type: Boolean
+    },
     // Currency
     gold: {
         default: 0,
@@ -71,10 +71,6 @@ const schema = new mongoose.Schema({
         default: false,
         type: Boolean
     },
-    canEarnExperience: {
-        default: true,
-        type: Boolean
-    }
 })
 
 module.exports = mongoose.model('User', schema)

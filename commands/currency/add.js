@@ -1,14 +1,21 @@
+// Akairo
 const { Command } = require('discord-akairo')
 
-const { addToUserBalance } = require('../../functions/currency')
-const { formatNumber, getAvatarUrl } = require('../../functions/helpers')
+// Mongoose
+const User = require('../../database/schema/user')
 
-const { MessageEmbed } = require('discord.js')
+// Functions
+const { 
+    embedConsoleError,
+    embedSuccess,
+    formatNumber,
+    checkPermissions
+} = require('../../functions/helpers')
 
 module.exports = class AddBalanceCommand extends Command {
     constructor() {
         super('addbalance', {
-            aliases: ['addbalance', 'addbal'],
+            aliases: ['addbalance', 'addbal', 'add'],
             args: [
                 {
                     id: 'user',
@@ -16,36 +23,39 @@ module.exports = class AddBalanceCommand extends Command {
                 },
                 {
                     id: 'amount',
-                    type: 'integer'
+                    type: 'number'
+                },
+                {
+                    id: 'reward',
+                    match: 'flag',
+                    flag: '--reward'
                 }
             ],
-            ownerOnly: true
         })
     }
 
-    exec(message, args) {
-        // Create user variable, depending on whether a user was mentioned
-        const discordUser = (args.user ? args.user : message.author)
-        
-        // Update user balance function
-        addToUserBalance(discordUser.id, args.amount)
-        .then(user => {
-            // Create embed
-            const embed = new MessageEmbed({
-                color: '#ffa801',
-                description: `${message.author} has increased ${discordUser}'s Gold! They now have ${formatNumber(user.gold)} Gold!`,
-                footer: {
-                    iconURL: getAvatarUrl(client.user),
-                    text: client.user.username
-                }
-            }).setTimestamp()
+    async exec(message, { user, amount, reward }) {
+        const discordId = user.id
+        const permitted = await checkPermissions(message, 'ADMINISTRATOR')
 
-            // Send embed
-            return message.channel.send(embed)
-        })
-        .catch(error => {
-            // Handle error
-            console.error(error)
-        })
+        try {
+            if(permitted) {
+                message.delete()
+
+                const db = await User.findOneAndUpdate({ discordId }, { $inc: { gold: amount } }, { new: true })
+                let embed
+
+                if(!reward) {
+                    embed = embedSuccess(`💰 ${user}, your balance has increased by ${formatNumber(amount)} Gold thanks to ${message.author}!\n\nYou now have ${formatNumber(db.gold)} Gold!`)
+                } else {
+                    embed = embedSuccess(`💰 ${user}, you have been rewarded ${formatNumber(amount)} Gold by ${message.author}!\n\nYou now have ${formatNumber(db.gold)} Gold!`)
+                }
+
+                return message.channel.send(embed)
+            }
+        } catch(error) {
+            const embed = embedConsoleError(error)
+            return message.chanel.send(embed)
+        }
     }
 }

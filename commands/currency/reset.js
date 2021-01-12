@@ -1,32 +1,45 @@
+// Akairo
 const { Command } = require('discord-akairo')
 
-const { resetDailies } = require('../../functions/currency')
-const { getAvatarUrl } = require('../../functions/helpers')
+// Mongoose
+const User = require('../../database/schema/user')
 
-const { MessageEmbed } = require('discord.js')
+// Functions
+const { 
+    embedConsoleError,
+    embedSuccess,
+    checkPermissions
+} = require('../../functions/helpers')
 
-module.exports = class ResetCommand extends Command {
+module.exports = class ResetDailiesCommand extends Command {
     constructor() {
-        super('reset', {
-            aliases: ['reset', 'resetdailies']
+        super('resetdailies', {
+            aliases: ['resetdailies', 'resetdaily']
         })
     }
 
-    exec(message) {
-        // Reset dailies
-        resetDailies()
+    async exec(message) {
+        const permitted = await checkPermissions(message, 'ADMINISTRATOR')
+        
+        try {
+            if(permitted) {
+                const users = await User.find({ hasUsedDaily: true })
 
-        // Create embed
-        const embed = new MessageEmbed({
-            color: '#0be881',
-            description: 'Dailies have been successfully reset, everyone can use the command again!',
-            footer: {
-                iconURL: getAvatarUrl(client.user),
-                text: client.user.username
+                users.forEach(async user => {
+                    try {
+                        await User.findOneAndUpdate({ discordId: user.discordId }, { hasUsedDaily: false }, { new: true })
+                    } catch(error) {
+                        const embed = embedConsoleError(error)
+                        return message.channel.send(embed)
+                    }
+                })
+
+                const embed = embedSuccess('✅ Everyone can use the daily command again today!')
+                return message.channel.send(embed)
             }
-        }).setTimestamp()
-
-        // Send embed
-        return message.channel.send(embed)
+        } catch(error) {
+            const embed = embedConsoleError(error)
+            return message.channel.send(embed)
+        }
     }
 }
