@@ -38,23 +38,23 @@ module.exports = class WinCustomGameCommand extends Command {
                     
                     if(winningTeam === 1) {
                         game.teamOne.forEach(async discordId => {
-                            await User.findOneAndUpdate({ discordId }, { $inc: { gold: 2500, blueEssence: 1000, gamesPlayed: 1, wins: 1 } }, { new: true })
+                            await User.findOneAndUpdate({ discordId }, { $inc: { gold: 2500, blueEssence: 1000, wins: 1 } }, { new: true })
                             const member = message.guild.members.cache.get(discordId)
                             winners.push(member)
                         })
 
                         game.teamTwo.forEach(async discordId => {
-                            await User.findOneAndUpdate({ discordId }, { $inc: { gold: 500, blueEssence: 250 }, gamesPlayed: 1, losses: 1 }, { new: true })
+                            await User.findOneAndUpdate({ discordId }, { $inc: { gold: 500, blueEssence: 250 }, losses: 1 }, { new: true })
                         })
                     } else {
                         game.teamTwo.forEach(async discordId => {
-                            await User.findOneAndUpdate({ discordId }, { $inc: { gold: 2500, blueEssence: 1000, gamesPlayed: 1, wins: 1 } }, { new: true })
+                            await User.findOneAndUpdate({ discordId }, { $inc: { gold: 2500, blueEssence: 1000, wins: 1 } }, { new: true })
                             const user = message.guild.members.cache.get(discordId)
                             winners.push(user)
                         })
 
                         game.teamOne.forEach(async discordId => {
-                            await User.findOneAndUpdate({ discordId }, { $inc: { gold: 500, blueEssence: 250 }, gamesPlayed: 1, losses: 1 }, { new: true })
+                            await User.findOneAndUpdate({ discordId }, { $inc: { gold: 500, blueEssence: 250 }, losses: 1 }, { new: true })
                         })
                     }
 

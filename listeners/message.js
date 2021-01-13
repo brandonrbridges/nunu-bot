@@ -48,6 +48,11 @@ module.exports = class MessageListener extends Listener {
             }
         }
 
+        // Tangerine
+        if(message.content.includes('orange') || message.content.includes('orange') || message.content.includes('trial mod') || message.content.includes('trial admin')) {
+            return message.react('🍊')
+        }
+
         // Jess approves
         if(message.author.id === '165134266659766272' && message.content === 'https://tenor.com/view/tohru-kobayashisan-chi-no-maid-dragon-dragon-maid-thumbs-up-gif-12390446') {
             const embed = embedStandard(`✅ Jess approves!`)

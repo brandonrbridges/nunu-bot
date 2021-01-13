@@ -104,7 +104,7 @@ const profile = async (message, discordId) => {
                     },
                     {
                         name: 'Winrate',
-                        value: Math.round((user.wins / user.gamesPlayed * 100) / 1) + '%',
+                        value: Math.round((user.wins / (user.wins + user.losses) * 100) / 1) + '%',
                         inline: true
                     },
                 ],
