@@ -1,9 +1,17 @@
+// Akairo
 const { Command } = require('discord-akairo')
 
-const { checkPermissions } = require('../../functions/helpers')
-const { kickMember } = require('../../functions/moderation')
+// Functions
+const {
+    
+} = require('../../functions/moderation')
 
-const { MessageEmbed } = require('discord.js')
+const {
+    checkPermissions,
+    embedConsoleError,
+    embedError,
+    embedSuccess,
+} = require('../../functions/helpers')
 
 module.exports = class KickCommand extends Command {
     constructor() {
@@ -16,28 +24,30 @@ module.exports = class KickCommand extends Command {
                 },
                 {
                     id: 'reason',
-                    type: 'string',
+                    type: 'string'
                 }
             ]
         })
     }
 
-    exec(message, args) {
-        // Check permissions
-        checkPermissions(message, 'KICK_MEMBERS')
-        .then(() => {
-            // Create embed
-            const embed = new MessageEmbed().setTimestamp()
-            
-            // Check if member is kickable
-            if(member.kickable) {
-                
-            } else {
-                
+    async exec(message, { member, reason }) {
+        const permission = await checkPermissions(message, 'KICK_MEMBERS')
+
+        try {
+            if(permission) {
+                if(member.kickable) {
+                    member.kick({ reason })
+
+                    const embed = embedSuccess(`👋 ${member} has been kicked from ${message.guild.name} by ${message.author}!`)
+                    return message.channel.send(embed)
+                } else {
+                    const embed = embedError(`${message.author}, you cannot kick ${member}!`)
+                    return message.channel.send(embed)
+                }
             }
-        })
-        .catch(embed => {
+        } catch(error) {
+            const embed = embedConsoleError(error)
             return message.channel.send(embed)
-        })
+        }
     }
 }
