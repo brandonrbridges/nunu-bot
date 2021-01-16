@@ -40,7 +40,7 @@ module.exports = class StartCustomGameCommand extends Command {
                         count++
                     })
 
-                    game = await CustomGame.findOneAndUpdate({ isActive: true }, { $set: { inProgress: true, teamOne, teamTwo } }, { new: true})
+                    game = await CustomGame.findOneAndUpdate({ isActive: true }, { $set: { inProgress: true, teamOne, teamTwo } }, { new: true })
 
                     teamOne = [], teamTwo = []
 

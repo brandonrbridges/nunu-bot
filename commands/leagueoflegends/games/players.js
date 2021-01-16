@@ -30,8 +30,13 @@ module.exports = class PlayersCustomGameCommand extends Command {
                     players.push(member)
                 })
 
-                const embed = embedStandard(`🕹️ There are currently ${game.players.length} queued for the custom game.`).addFields({ name: 'Players', value: players })
-                return message.channel.send(embed)
+                if(players >= 1) {
+                    const embed = embedStandard(`🕹️ There are currently ${game.players.length} queued for the custom game.`).addFields({ name: 'Players', value: players })
+                    return message.channel.send(embed)
+                } else {
+                    const embed = embedStandard(`🕹️ There are currently no players in the custom game. Use ${prefix}joincustom to join.`)
+                    return message.channel.send(embed)
+                }
             } else {
                 const embed = embedError(`${message.author}, there are no active custom games at the moment.`)
                 return message.channel.send(embed)

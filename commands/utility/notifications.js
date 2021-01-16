@@ -28,7 +28,7 @@ module.exports = class NotificationsCommand extends Command {
                 description: 'The Notifications command will grant you a role in which you wish to be notified for something. E.g. Custom Games',
                 fields: [
                     {
-                        name: '!notifications games',
+                        name: `${prefix}notifications games`,
                         value: 'Receive a notification when Custom Games are being hosted'
                     }
                 ],

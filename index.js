@@ -11,7 +11,7 @@ const { resetExperienceGain } = require('./functions/levelling')
 
 const CustomGame = require('./database/schema/customgame')
 
-const prefix = ','
+prefix = '!'
 
 class Client extends AkairoClient {
     constructor() {

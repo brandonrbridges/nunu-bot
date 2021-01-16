@@ -48,8 +48,18 @@ module.exports = class MessageListener extends Listener {
             }
         }
 
+        // Shen
+        if(message.content.toLowerCase().includes('shen')) {
+            return message.react('<:shen:799765676054806548>')
+        }
+
+        // Pog
+        if(message.content.toLowerCase().includes('pog')) {
+            return message.react('<a:pogo:791278798049509406>')
+        }
+
         // Tangerine
-        if(message.content.includes('orange') || message.content.includes('orange') || message.content.includes('trial mod') || message.content.includes('trial admin')) {
+        if(message.content.toLowerCase().includes('orange') || message.content.toLowerCase().includes('tangerine') || message.content.toLowerCase().includes('trial mod') || message.content.toLowerCase().includes('trial admin')) {
             return message.react('🍊')
         }
 
@@ -60,8 +70,14 @@ module.exports = class MessageListener extends Listener {
         }
 
         // Igni memes
-        if(message.author.id === '513048504487378964' && message.content === 'guys im gonna only ask once' && message.channel.name !== 'memes') {
+        if(message.author.id === '513048504487378964' && message.content.toLowerCase() === 'guys im gonna only ask once' && message.channel.name !== 'memes') {
             const embed = embedStandard(`${message.author} has spoken! Keep memes out of ${message.channel}!`)
+            return message.channel.send(embed)
+        }
+
+        // Luis inting
+        if(message.author.id === '334107033831735308' && message.content.toLowerCase().includes('play a game')) {
+            const embed = embedStandard('Willump: Oh no, inting time!\nNunu: *grunts*')
             return message.channel.send(embed)
         }
     }

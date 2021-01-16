@@ -1,8 +1,8 @@
 const { Listener } = require('discord-akairo')
 
-const { getAvatarUrl } = require('../functions/helpers')
-
-const { MessageEmbed } = require('discord.js')
+const {
+    embedError
+} = require('../functions/helpers')
 
 module.exports = class GuildMemberRemoveListener extends Listener {
     constructor() {
@@ -15,11 +15,8 @@ module.exports = class GuildMemberRemoveListener extends Listener {
     exec(member) {
         const channel = member.guild.systemChannel
 
-        const embed = new MessageEmbed({
-            color: '#f53b57',
-            description: `${member} has left the server! Farewell, our old friend!`,
-        }).setTimestamp()
+        const embed = embedError(`👋 ${member} has left the server! Farewell, our old friend!`)
 
-        channel.send(embed)
+        return channel.send(embed)
     }
 }

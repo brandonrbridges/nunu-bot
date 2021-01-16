@@ -29,7 +29,7 @@ module.exports = class JoinCustomGameCommand extends Command {
                         await CustomGame.findOneAndUpdate({ guildId: message.guild.id, isActive: true }, { $push: { players: discordId } }, { new: true })
                         game = await CustomGame.findOne({ guildId: message.guild.id, isActive: true }) 
 
-                        if(game.players.length == 10) {
+                        if(game.players.length === game.maxPlayers) {
                             const embed = embedSuccess(`🕹️ ${message.author}, you have joined the custom game! The lobby is now full!`).addFields({ name: 'In Lobby', value: game.players.length, inline: true }, { name: 'Remaining Spots', value: (10 - game.players.length), inline: true })
                             return message.channel.send(embed)
                         } else {

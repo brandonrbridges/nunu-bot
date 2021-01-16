@@ -16,7 +16,7 @@ const addExperience = async (discordId) => {
         const user = await User.findOne({ discordId })
 
         if(user && user.canEarnExperience) {
-            const randomXp = Math.floor(Math.random() * 15) + 5
+            const randomXp = Math.floor(Math.random() * 10) + 5
             await User.findOneAndUpdate({ discordId }, { experience: user.experience + randomXp, canEarnExperience: false }, { new: true })
         } else {
             return
