@@ -14,10 +14,10 @@ const {
 // Moment
 const moment = require('moment')
 
-module.exports = class InfoCommand extends Command {
+module.exports = class ProfilePictureCommand extends Command {
     constructor() {
-        super('info', {
-            aliases: ['info'],
+        super('profilepicture', {
+            aliases: ['profilepicture', 'pfp'],
             args: [
                 {
                     id: 'member',
@@ -30,14 +30,8 @@ module.exports = class InfoCommand extends Command {
 
     async exec(message, { member }) {
         try {
-            const user = await User.findOne({ discordId: member.id })
-            const embed = embedStandard(`🔎 Information on ${member}`)
-                .addField(`Joined this server`, `${moment(member.joinedTimestamp).fromNow()} (${moment(member.joinedTimestamp).format('DD/MM/YY HH:mm')})`, true)
-                .addField(`Highest Role`, member.roles.highest, true)
-                .addField('Level', user.level, true)
-                .addField('Joined Discord', `${moment(member.user.createdTimestamp).fromNow()}`, true)
-                .addField('Tag', `${member.user.tag}`, true)
-                .setThumbnail(getAvatarUrl(member.user))
+            const embed = embedStandard(`🔎 Enlarged profile picture of ${member}`)
+                .setImage(getAvatarUrl(member.user))
             return message.channel.send(embed)
         } catch(error) {
             const embed = embedConsoleError(error)

@@ -19,18 +19,18 @@ module.exports = class LeaderboardCommand extends Command {
 
     async exec(message) {
         try {
-            const users = await User.find({}, { sort: { level: -1, experience: -1 } })
+            const users = await User.find({}, { sort: { level: 1, experience: 1 } }, { limit: 8 })
 
-            message.channel.send(users)
+            console.log(users)
+
+            message.channel.send('sent to console')
         
             const embed = embedStandard(`${message.guild.name}'s Leaderboard!`)
 
             let count = 1
-            users.forEach(user => {
-                message.channel.send(user)
-                
+            users.forEach(async user => {
                 const member = message.guild.members.cache.get(user.discordId)
-                embed.addField(`${count}. ${member}`, `Level ${user.level} (${user.lifetimeExperience} XP)`)
+                embed.addField(`${count}. ${member}`, `Level ${user.level} (${user.experience} XP)`)
                 count++
             })
 

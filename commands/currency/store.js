@@ -1,10 +1,14 @@
+// Akairo
 const { Command } = require('discord-akairo')
 
-const { getAvatarUrl } = require('../../functions/helpers')
-
+// Database
 const store = require('../../database/store')
 
-const { MessageEmbed } = require('discord.js')
+// Functions
+const { 
+    embedStandard,
+    formatNumber 
+} = require('../../functions/helpers')
 
 module.exports = class StoreCommand extends Command {
     constructor() {
@@ -14,18 +18,11 @@ module.exports = class StoreCommand extends Command {
     }
 
     exec(message) {
-        const embed = new MessageEmbed({
-            color: '#ffa801',
-            description: `🛒 ${message.guild.name} BE Store`,
-            footer: {
-                iconURL: getAvatarUrl(client.user),
-                text: client.user.username
-            }
-        }).setTimestamp()
+        const embed = embedStandard(`🛒 ${message.guild.name} BE Store`)
 
-        for(const item in store) {
-            console.log(item)
-            // embed.addField(item.name, item.price)
+        for(let i = 0; i < store.length; i++) {
+            console.log(store[i])
+            embed.addField(store[i].name, `Description: ${store[i].description}\nPrice: ${formatNumber(store[i].price)} BE`)
         }
 
         return message.channel.send(embed)
