@@ -21,6 +21,19 @@ const checkPermissions = async (message, permission) => {
     }
 }
 
+const checkRole = async (message, role) => {
+    const guildRole = message.guild.roles.cache.find(role => role.name == role)
+    
+    if(message.member.roles.has(guildRole)) {
+        return true
+    } else {
+        const embed = embedError(`${message.member}, you are not allowed to use this command.`)
+        message.channel.send(embed)
+
+        return false
+    }
+}
+
 /**
  * Embed Error
  */
@@ -137,6 +150,7 @@ module.exports.removeFromArray = removeFromArray = (array, string) => {
  */
 module.exports = {
     checkPermissions,
+    checkRole,
     embedConsoleError,
     embedSuccess,
     embedStandard,

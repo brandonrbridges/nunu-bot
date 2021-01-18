@@ -7,7 +7,7 @@ const { MessageEmbed } = require('discord.js')
 module.exports = class NotificationsCommand extends Command {
     constructor() {
         super('notifications', {
-            aliases: ['notifications'],
+            aliases: ['notifications', 'notifyme', 'notify'],
             args: [
                 {
                     id: 'type',

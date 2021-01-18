@@ -6,6 +6,7 @@ const CustomGame = require('../../../database/schema/customgame')
 
 // Functions
 const {
+    checkRole,
     embedConsoleError,
     embedError,
     embedSuccess

@@ -30,7 +30,7 @@ module.exports = class PlayersCustomGameCommand extends Command {
                     players.push(member)
                 })
 
-                if(players >= 1) {
+                if(players.length >= 1) {
                     const embed = embedStandard(`🕹️ There are currently ${game.players.length} queued for the custom game.`).addFields({ name: 'Players', value: players })
                     return message.channel.send(embed)
                 } else {

@@ -6,6 +6,7 @@ const CustomGame = require('../../../database/schema/customgame')
 
 // Functions
 const {
+    checkRole,
     embedConsoleError,
     embedError,
     embedSuccess
@@ -20,17 +21,22 @@ module.exports = class CreateCustomGameCommand extends Command {
     
     async exec(message) { 
         try {
-            const existing = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })
+            const permission = checkRole(message, 'Staff')
+
+            if(permission) {
+                const existing = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })
     
-            if(!existing) {
-                await new CustomGame({ guildId: message.guild.id }).save()
-    
-                const embed = embedSuccess(`🕹️ A custom game has been created!`)
-                return message.channel.send(embed)
-            } else {
-                const embed = embedError('An active custom game already exists.')
-                return message.channel.send(embed)
+                if(!existing) {
+                    await new CustomGame({ guildId: message.guild.id }).save()
+        
+                    const embed = embedSuccess(`🕹️ A custom game has been created!`)
+                    return message.channel.send(embed)
+                } else {
+                    const embed = embedError('An active custom game already exists.')
+                    return message.channel.send(embed)
+                }
             }
+            
         } catch(error) {
             const embed = embedConsoleError(error)
             return message.channel.send(embed)
