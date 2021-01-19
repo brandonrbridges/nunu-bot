@@ -16,7 +16,7 @@ const {
 module.exports = class WinCustomGameCommand extends Command {
     constructor() {
         super('wincustom', {
-            aliases: ['wincustom'],
+            aliases: ['wincustom', 'endcustom', 'giveprize'],
             args: [
                 {
                     id: 'winningTeam',
