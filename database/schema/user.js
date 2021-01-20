@@ -10,6 +10,10 @@ const schema = new mongoose.Schema({
         default: null,
         type: String
     },
+    infractions: {
+        default: [],
+        type: Array
+    },
     // Twitch
     twitchUsername: {
         default: null,
