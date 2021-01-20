@@ -15,8 +15,6 @@ const {
 const { levels } = require('../../database/levels')
 
 // Image Manipulations
-// const { Canvas } = require('canvas-constructor')
-const downloader = require('image-downloader')
 const jimp = require('jimp')
 
 module.exports = class TestProfileCommand extends Command {
