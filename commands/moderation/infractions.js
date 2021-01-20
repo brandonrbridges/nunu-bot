@@ -6,10 +6,11 @@ const User = require('../../database/schema/user')
 
 // Functions
 const { 
+    checkRole,
     embedConsoleError,
     embedError,
     embedStandard,
-    embedSuccess
+    embedSuccess,
 } = require('../../functions/helpers')
 
 // Moment
@@ -31,39 +32,43 @@ module.exports = class InfractionsCommand extends Command {
 
     async exec(message, { member }) {
         try {
-            const staffId = message.author.id
-            const db = await User.findOne({ discordId: member.id })
+            const permission = checkRole(message, 'Staff')
 
-            if(db.infractions.length >= 1) {
-                const infractions = db.infractions
-                
-                const embed = embedStandard(`❗ ${member}'s Warnings\nUse the reactions to delete the warnings if you wish to do so.`)
+            if(permission) {
+                const staffId = message.author.id
+                const db = await User.findOne({ discordId: member.id })
 
-                let count = 1;
+                if(db.infractions.length >= 1) {
+                    const infractions = db.infractions
+                    
+                    const embed = embedStandard(`❗ ${member}'s Warnings\nUse the reactions to delete the warnings if you wish to do so.`)
 
-                infractions.forEach(infraction => {
-                    let staffMember = message.guild.members.cache.get(infraction.staffId)
+                    let count = 1;
 
-                    embed.addField(`${count}. Warned ${moment(infraction.date).fromNow()}`, `Staff Member: ${staffMember}\nReason: ${infraction.reason}`)
+                    infractions.forEach(infraction => {
+                        let staffMember = message.guild.members.cache.get(infraction.staffId)
 
-                    count++
-                })
-                
-                return message.channel.send(embed).then(async message => {
-                    await message.react('🔥')
+                        embed.addField(`${count}. Warned ${moment(infraction.date).fromNow()}`, `Staff Member: ${staffMember}\nReason: ${infraction.reason}`)
 
-                    message.awaitReactions((reaction, user) => user.id == staffId && (reaction.emoji.name == '🔥'), { max: 1, time: 30000 }).then(async collected => {
-                        if(collected.first().emoji.name == '🔥') {
-                            await User.findOneAndUpdate({ discordId: member.id }, { $set: { infractions: [] } }, { new: true })
-                            
-                            const embed = embedSuccess(`✅ I have deleted all warnings for ${member}, their slate has been wiped clean!`)
-                            return message.channel.send(embed)
-                        }
+                        count++
                     })
-                })
-            } else {
-                const embed = embedSuccess(`✅ ${member} doesn't appear to have any warnings. They're well behaved, huh?`)
-                return message.channel.send(embed)
+                    
+                    return message.channel.send(embed).then(async message => {
+                        await message.react('🔥')
+
+                        message.awaitReactions((reaction, user) => user.id == staffId && (reaction.emoji.name == '🔥'), { max: 1, time: 30000 }).then(async collected => {
+                            if(collected.first().emoji.name == '🔥') {
+                                await User.findOneAndUpdate({ discordId: member.id }, { $set: { infractions: [] } }, { new: true })
+                                
+                                const embed = embedSuccess(`✅ I have deleted all warnings for ${member}, their slate has been wiped clean!`)
+                                return message.channel.send(embed)
+                            }
+                        })
+                    })
+                } else {
+                    const embed = embedSuccess(`✅ ${member} doesn't appear to have any warnings. They're well behaved, huh?`)
+                    return message.channel.send(embed)
+                }
             }
         } catch(error) {
             const embed = embedConsoleError(error)

@@ -82,9 +82,28 @@ cron.schedule('* * * * *', () => {
  * 
  * @description Runs at 7pm everyday and creates a server wide custom game
  */
-cron.schedule('0 19 * * *', () => {
-    // Create custom game
-    // const guild = client.guilds
+cron.schedule('55 18 * * *', () => {
+
+    const guild = client.guilds.cache.get('788731111845003294')
+    const channel = guild.channels.cache.find(channel => channel.name == 'general')
+    const role = guild.roles.cache.find(role => role.name == 'Custom Games')
+
+    const embed = embedStandard(` 🕹️ Players be ready! Our Custom Games are starting in 5 minutes!`)
+
+    channel.send(role)
+    return channel.send(embed)
+})
+
+cron.schedule('00 19 * * *', () => {
+
+    const guild = client.guilds.cache.get('788731111845003294')
+    const channel = guild.channels.cache.find(channel => channel.name == 'general')
+    const role = guild.roles.cache.find(role => role.name == 'Custom Games')
+
+    const embed = embedStandard(`🕹️ Let the Custom Games begin! Let's go!`)
+
+    channel.send(role)
+    return channel.send(embed)
 })
 
 /**

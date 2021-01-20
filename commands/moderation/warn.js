@@ -6,7 +6,7 @@ const User = require('../../database/schema/user')
 
 // Functions
 const { 
-    checkPermissions,
+    checkRole,
     embedConsoleError,
     embedError,
     embedStandard,
@@ -32,7 +32,7 @@ module.exports = class WarnCommand extends Command {
 
     async exec(message, { member, warnreason }) {
         try {
-            const permission = await checkPermissions(message, 'KICK_MEMBERS')
+            const permission = checkRole(message, 'Staff')
 
             if(permission) {
                 if(!member && !reason) {
@@ -41,11 +41,8 @@ module.exports = class WarnCommand extends Command {
                 }
                 
                 const db = await User.findOne({ discordId: member.id })
-                if(warnreason) {
-                    const reason = message.content.split(' ').slice(2).join(' ')
-                } else {
-                    const reason = 'No reason provided'
-                }
+
+                let reason = message.content.split(' ').slice(2).join(' ')
 
                 const warning = {
                     guildId: message.guild.id,
