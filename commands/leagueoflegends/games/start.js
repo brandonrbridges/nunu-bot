@@ -6,10 +6,12 @@ const CustomGame = require('../../../database/schema/customgame')
 
 // Functions
 const {
+    checkRole,
     embedConsoleError,
     embedError,
     embedStandard,
     embedSuccess,
+    removeFromArray
 } = require('../../../functions/helpers')
 
 module.exports = class StartCustomGameCommand extends Command {
@@ -47,17 +49,31 @@ module.exports = class StartCustomGameCommand extends Command {
 
                         teamOne = [], teamTwo = []
 
+                        let positions = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
+
                         game.teamOne.forEach(discordId => {
+                            let pos = positions[Math.floor(Math.random() * positions.length)]
+                            let emoji = message.guild.emojis.cache.find(emoji => emoji.name == `position_${pos.toLowerCase()}`)
+
                             const member = message.guild.members.cache.get(discordId)
-                            teamOne.push(member)
+                            teamOne.push(`${emoji} ${member}`)
+
+                            positions = removeFromArray(positions, pos)
                         })
+
+                        positions = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
 
                         game.teamTwo.forEach(discordId => {
+                            let pos = positions[Math.floor(Math.random() * positions.length)]
+                            let emoji = message.guild.emojis.cache.find(emoji => emoji.name == `position_${pos.toLowerCase()}`)
+
                             const member = message.guild.members.cache.get(discordId)
-                            teamTwo.push(member)
+                            teamTwo.push(`${emoji} ${member}`)
+
+                            positions = removeFromArray(positions, pos)
                         })
 
-                        const embed = embedSuccess(`🕹️ Let the games begin!`).addFields({ name: 'Team One', value: teamOne, inline: true }, { name: 'Team Two', value: teamTwo, inline: true })
+                        const embed = embedSuccess(`🕹️ Let the games begin! Your randomised teams and lanes are below!`).addFields({ name: 'Team One', value: teamOne, inline: true }, { name: 'Team Two', value: teamTwo, inline: true })
                         return message.channel.send(embed)
                     } else {
                         let teamOne = [], teamTwo = []

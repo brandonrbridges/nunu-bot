@@ -55,6 +55,10 @@ const schema = new mongoose.Schema({
         type: Boolean
     },
     // Currency
+    bank: {
+        default: 0,
+        type: Number
+    },
     gold: {
         default: 0,
         type: Number

@@ -27,8 +27,6 @@ module.exports = class DeleteCustomGameCommand extends Command {
                 const game = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })
     
                 if(game) {
-                    message.delete()
-                    
                     await game.delete()
         
                     const embed = embedSuccess(`🕹️ ${message.author}, the active custom game has been deleted!`)

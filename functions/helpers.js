@@ -21,8 +21,8 @@ const checkPermissions = async (message, permission) => {
     }
 }
 
-const checkRole = async (message, role) => {
-    const guildRole = message.guild.roles.cache.find(role => role.name == role)
+const checkRole = async (message, roleName) => {
+    const guildRole = message.guild.roles.cache.find(role => role.name == roleName)
     
     if(message.member.roles.has(guildRole)) {
         return true

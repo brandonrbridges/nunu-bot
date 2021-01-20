@@ -13,26 +13,37 @@ const {
 module.exports = class LeaderboardCommand extends Command {
     constructor() {
         super('leaderboard', {
-            aliases: ['leaderboard']
+            aliases: ['leaderboard', 'lb']
         })
     }
 
     async exec(message) {
         try {
-            const users = await User.find({}, { sort: { level: 1, experience: 1 } }, { limit: 8 })
+            const users = await User.find({}, {  }).sort({ level: -1, experience: -1 })
 
-            console.log(users)
+            const lbUsers = []
 
-            message.channel.send('sent to console')
-        
-            const embed = embedStandard(`${message.guild.name}'s Leaderboard!`)
-
-            let count = 1
-            users.forEach(async user => {
-                const member = message.guild.members.cache.get(user.discordId)
-                embed.addField(`${count}. ${member}`, `Level ${user.level} (${user.experience} XP)`)
-                count++
+            users.forEach(user => {
+                const member = message.guild.members.cache.find(member => member.id === user.discordId)
+                if(member) {
+                    lbUsers.push(member)
+                }
             })
+
+            const embed = embedStandard(`🏆 ${message.guild.name}'s Leaderboard!`)
+
+            for(let i = 0; i <= 9; i++) {
+                const db = await User.findOne({ discordId: lbUsers[i].id })
+                if(i == 0) {
+                    embed.addField(`Rank ${i + 1} (Top Dog)`, `<:trophy1:801440737341734933> ${lbUsers[i]} - Level: ${db.level} - XP: ${db.experience}`)
+                } else if(i == 1) {
+                    embed.addField(`Rank ${i + 1}`, `<:trophy2:801440737732198450> ${lbUsers[i]} - Level: ${db.level} - XP: ${db.experience}`)
+                } else if(i == 2) {
+                    embed.addField(`Rank ${i + 1}`, `<:trophy3:801440737966817280> ${lbUsers[i]} - Level: ${db.level} - XP: ${db.experience}`)
+                } else {
+                    embed.addField(`Rank ${i + 1}`, `${lbUsers[i]} - Level: ${db.level} - XP: ${db.experience}`)
+                }
+            }
 
             return message.channel.send(embed)
         } catch(error) {

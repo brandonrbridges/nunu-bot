@@ -25,7 +25,7 @@ module.exports = class MessageUpdateListener extends Listener {
         // Create embed
         const embed = new MessageEmbed({
             color: '#0be881',
-            description: `An message has been updated/modified!`,
+            description: `A message has been updated/modified!`,
             fields: [
                 {
                     name: 'Author',

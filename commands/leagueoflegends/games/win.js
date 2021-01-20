@@ -7,6 +7,7 @@ const User = require('../../../database/schema/user')
 
 // Functions
 const {
+    checkRole,
     embedConsoleError,
     embedError,
     embedSuccess

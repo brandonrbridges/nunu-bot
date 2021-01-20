@@ -6,7 +6,7 @@ const User = require('../database/schema/user')
 /**
  * Helpers
  */
-const { embedConsoleError, embedError, embedStandard, embedSuccess, getAvatarUrl } = require('./helpers')
+const { embedConsoleError, embedError, embedStandard, embedSuccess, formatNumber, getAvatarUrl } = require('./helpers')
 
 /**
  * Discord.js
@@ -69,12 +69,12 @@ const profile = async (message, discordId) => {
                     },
                     {
                         name: 'Experience',
-                        value: user.experience,
+                        value: formatNumber(user.experience),
                         inline: true
                     },
                     {
-                        name: 'Placeholder',
-                        value: 'null',
+                        name: 'Bank',
+                        value: formatNumber(user.bank),
                         inline: true
                     },
                     {
@@ -84,12 +84,12 @@ const profile = async (message, discordId) => {
                     },
                     {
                         name: 'Blue Essence',
-                        value: user.blueEssence,
+                        value: formatNumber(user.blueEssence),
                         inline: true
                     },
                     {
                         name: 'Orange Essence',
-                        value: user.orangeEssence,
+                        value: formatNumber(user.orangeEssence),
                         inline: true
                     },
                     {
