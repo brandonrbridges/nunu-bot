@@ -21,7 +21,7 @@ module.exports = class CreateCustomGameCommand extends Command {
     
     async exec(message) { 
         try {
-            const permission = checkRole(message, 'Staff')
+            const permission = await checkRole(message, 'Staff')
 
             if(permission) {
                 const existing = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })

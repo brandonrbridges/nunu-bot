@@ -17,7 +17,7 @@ const {
 module.exports = class LevelCommand extends Command {
     constructor() {
         super('level', {
-            aliases: ['level', 'xp'],
+            aliases: ['level', 'rank', 'xp'],
             args: [
                 {
                     id: 'user',

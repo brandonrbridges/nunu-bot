@@ -29,7 +29,7 @@ module.exports = class WinCustomGameCommand extends Command {
 
     async exec(message, { winningTeam }) {
         try {
-            const permission = checkRole(message, 'Staff')
+            const permission = await checkRole(message, 'Staff')
 
             if(permission) {
                 const game = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })

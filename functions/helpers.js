@@ -21,10 +21,8 @@ const checkPermissions = async (message, permission) => {
     }
 }
 
-const checkRole = async (message, roleName) => {
-    const guildRole = message.guild.roles.cache.find(role => role.name == roleName)
-    
-    if(message.member.roles.has(guildRole)) {
+const checkRole = (message, roleName) => {
+    if(message.member.roles.cache.find(role => role.name == roleName)) { 
         return true
     } else {
         const embed = embedError(`${message.member}, you are not allowed to use this command.`)

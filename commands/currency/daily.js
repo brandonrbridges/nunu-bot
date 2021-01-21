@@ -8,7 +8,8 @@ const User = require('../../database/schema/user')
 const { 
     embedConsoleError,
     embedSuccess,
-    embedError
+    embedError,
+    formatNumber
 } = require('../../functions/helpers')
 
 // Moment
@@ -28,11 +29,15 @@ module.exports = class DailyCommand extends Command {
             const user = await User.findOne({ discordId })
 
             if(!user.hasUsedDaily) {
-                const amount = 500
-                await User.findOneAndUpdate({ discordId }, { $inc: { gold: amount }, $set: { hasUsedDaily: true } }, { new: true })
-
-                const embed = embedSuccess(`💰 ${message.author}, ${amount} Gold has been added to your balance!`)
-                return message.channel.send(embed)
+                if(message.member.premiumSinceTimestamp) {
+                    await User.findOneAndUpdate({ discordId }, { $inc: { gold: 1500, blueEssence: 200 }, $set: { hasUsedDaily: true } }, { new: true })
+                    const embed = embedSuccess(`💰 ${message.author}, you have received the following:`).addFields({ name: 'Gold', value: formatNumber(1500), inline: true }, { name: 'Blue Essence', value: 200, inline: true })
+                    return message.channel.send(embed)
+                } else {
+                    await User.findOneAndUpdate({ discordId }, { $inc: { gold: 500 }, $set: { hasUsedDaily: true } }, { new: true })
+                    const embed = embedSuccess(`💰 ${message.author}, you have received 500 Gold!`)
+                    return message.channel.send(embed)
+                }
             } else {
                 const remainingHours = moment().endOf('day').fromNow('true')
                 const remainingMinutes = moment().endOf('hour').fromNow('true')

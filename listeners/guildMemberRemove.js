@@ -1,5 +1,10 @@
+// Akairo
 const { Listener } = require('discord-akairo')
 
+// Mongoose
+const User = require('../database/schema/user')
+
+// Functions
 const {
     embedError
 } = require('../functions/helpers')
@@ -13,6 +18,8 @@ module.exports = class GuildMemberRemoveListener extends Listener {
     }
 
     exec(member) {
+        User.findOneAndDelete({ discordId: member.id })
+        
         const channel = member.guild.systemChannel
 
         const embed = embedError(`👋 ${member} has left the server! Farewell, our old friend!`)
