@@ -7,18 +7,18 @@ const { levels } = require('../database/levels')
 /**
  * Adds experience
  * 
- * @description Adds user experience and sets database earning to false, until reset
+ * @description Adds user experience
  * 
- * @version 1.0.0
+ * @version 1.1.0
  */
 const addExperience = async (discordId,content) => {
     try {
         const user = await User.findOne({ discordId })
 
         if(user && user.canEarnExperience) {
-            const cappedXP = Math.floor(50 - 10** (-(content.length-860)/507.5)) //even slight changes in values can be fatal lol
+            const cappedXP = Math.floor(50 - 10** (-(content.length-860)/507.5)) 
 
-            await User.findOneAndUpdate({ discordId }, { $inc: { experience: cappedXp }, $set: { canEarnExperience: false } }, { new: true })
+            await User.findOneAndUpdate({ discordId }, { $inc: { experience: cappedXp } }, { new: true })
             
         } else { 
             return
