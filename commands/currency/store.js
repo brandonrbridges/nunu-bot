@@ -13,7 +13,7 @@ const {
 module.exports = class StoreCommand extends Command {
     constructor() {
         super('store', {
-            aliases: ['store']
+            aliases: ['store', 'shop']
         })
     }
 

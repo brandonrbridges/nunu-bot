@@ -31,8 +31,14 @@ module.exports = class BetCommand extends Command {
             let  user = await User.findOne({ discordId })
     
             if(user) {
+                amount = Math.round(amount)
                 if(amount > 0) {
                     if(user.gold >= amount) {
+                        if(amount <= Math.round((user.gold / 5))) {
+                            const embed = embedError(`${message.author}, please bet ${Math.round((user.gold / 5))} Gold or higher.`).addField('Why?', 'To prevent Gold boosting, and playing the lower chances, you have to bet at least 20% of your current balance.')
+                            return message.channel.send(embed)
+                        }
+                        
                         let chance, winnings
     
                         if(amount <= 50) {
@@ -41,32 +47,32 @@ module.exports = class BetCommand extends Command {
                         }
     
                         if(amount <= 100) {
-                            chance = Math.random() < 0.77
+                            chance = Math.random() < 0.80
                             winnings = amount * 1.40
                         }
     
                         if(amount <= 200) {
-                            chance = Math.random() < 0.66
+                            chance = Math.random() < 0.72
                             winnings = amount * 1.44
                         }
     
                         if(amount <= 500) {
-                            chance = Math.random() < 0.55
+                            chance = Math.random() < 0.64
                             winnings = amount * 1.48
                         }
     
                         if(amount <= 1000) {
-                            chance = Math.random() < 0.44
+                            chance = Math.random() < 0.58
                             winnings = amount * 1.52
                         }
     
                         if(amount <= 2000) {
-                            chance = Math.random() < 0.33
+                            chance = Math.random() < 0.50
                             winnings = amount * 1.56
                         }
     
                         if(amount >= 2001) {
-                            chance = Math.random() < 0.26
+                            chance = Math.random() < 0.42
                             winnings = amount * 1.88
                         }
     
