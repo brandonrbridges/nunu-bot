@@ -11,14 +11,14 @@ const { levels } = require('../database/levels')
  * 
  * @version 1.0.0
  */
-const addExperience = async (discordId) => {
+const addExperience = async (discordId,content) => {
     try {
         const user = await User.findOne({ discordId })
 
         if(user && user.canEarnExperience) {
-            const randomXp = Math.floor(Math.random() * 10) + 5
+            const cappedXP = Math.floor(50 - 10** (-(content.length-860)/507.5)) //very delicate. even slight changes in values can be fatal lol
 
-            await User.findOneAndUpdate({ discordId }, { $inc: { experience: randomXp }, $set: { canEarnExperience: false } }, { new: true })
+            await User.findOneAndUpdate({ discordId }, { $inc: { experience: cappedXp }, $set: { canEarnExperience: false } }, { new: true })
             
         } else { 
             return
