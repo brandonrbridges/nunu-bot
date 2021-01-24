@@ -16,7 +16,7 @@ const addExperience = async (discordId,content) => {
         const user = await User.findOne({ discordId })
 
         if(user && user.canEarnExperience) {
-            const cappedXP = Math.floor(50 - 10** (-(content.length-860)/507.5)) //very delicate. even slight changes in values can be fatal lol
+            const cappedXP = Math.floor(50 - 10** (-(content.length-860)/507.5)) //even slight changes in values can be fatal lol
 
             await User.findOneAndUpdate({ discordId }, { $inc: { experience: cappedXp }, $set: { canEarnExperience: false } }, { new: true })
             
