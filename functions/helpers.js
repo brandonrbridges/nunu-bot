@@ -1,4 +1,44 @@
 const { MessageEmbed } = require('discord.js')
+const { Embeds } = require('discord-paginationembed')
+
+/**
+ * Navigation emotes
+ */
+const NavigationEmotes = {
+    forward: '➡️',
+    back: '⬅️',
+    delete: '🚫'
+  }
+
+/**
+ * Returns a paginated MessageEmbed
+ */
+const paginate = (embeds, { 
+    page = 1, 
+    color = '#f53b57', 
+    navigation = NavigationEmotes, 
+    build = true, 
+    title = '',
+    channel,
+    author,
+    } = {}) => {
+    if (!embeds) throw new Error('Paginate requires an array of message embeds.')
+
+    const embed = new Embeds()
+      .setArray(embeds)
+      .setAuthorizedUsers([author.id])
+      .setChannel(channel)
+      .setDisabledNavigationEmojis(['jump'])
+      .setPage(page)
+      .setTitle(title.toUpperCase())
+      .setFooter(' ')
+      .setColor(color)
+      .setPageIndicator('footer')
+      .setNavigationEmojis({ ...navigation })
+
+    if (build) return embed.build()
+    return embed
+  }
 
 /**
  * Check Permission
@@ -147,6 +187,7 @@ module.exports.removeFromArray = removeFromArray = (array, string) => {
  * Exports
  */
 module.exports = {
+    paginate,
     checkPermissions,
     checkRole,
     embedConsoleError,
