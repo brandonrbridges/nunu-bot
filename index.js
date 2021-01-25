@@ -8,6 +8,7 @@ const cron = require('node-cron')
 
 const { resetDailies } = require('./functions/currency')
 const { resetExperienceGain } = require('./functions/levelling')
+const { embedStandard } = require('./functions/helpers')
 
 const CustomGame = require('./database/schema/customgame')
 

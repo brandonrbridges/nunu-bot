@@ -27,7 +27,7 @@ module.exports = class MessageListener extends Listener {
         createUser(message.author.id)
         
         // Add experience for message sent
-        addExperience(message.author.id)
+        addExperience(message, message.author.id)
 
         // Check user XP if to level up or not
         checkXp(message.author.id, message.guild, message.channel)

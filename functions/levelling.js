@@ -11,17 +11,19 @@ const { levels } = require('../database/levels')
  * 
  * @version 1.0.0
  */
-const addExperience = async (discordId) => {
+const addExperience = async (message, discordId) => {
     try {
         const user = await User.findOne({ discordId })
 
-        if(user && user.canEarnExperience) {
-            const randomXp = Math.floor(Math.random() * 10) + 5
-
-            await User.findOneAndUpdate({ discordId }, { $inc: { experience: randomXp }, $set: { canEarnExperience: false } }, { new: true })
-            
-        } else { 
-            return
+        if(!message.content.startsWith('!')) {
+            if(user && user.canEarnExperience) {
+                const randomXp = Math.floor(Math.random() * 10) + 5
+    
+                await User.findOneAndUpdate({ discordId }, { $inc: { experience: randomXp }, $set: { canEarnExperience: false } }, { new: true })
+                
+            } else { 
+                return
+            }
         }
     } catch(error) {
         return console.error(error) 
