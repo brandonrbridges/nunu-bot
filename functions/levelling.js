@@ -18,9 +18,14 @@ const addExperience = async (message, discordId) => {
         if(!message.content.startsWith('!')) {
             if(user && user.canEarnExperience) {
                 const randomXp = Math.floor(Math.random() * 10) + 5
+
+                // if(message.author.id === '334107033831735308') {
+                //     await User.findOneAndUpdate({ discordId }, { $inc: { experience: -randomXp }, $set: { canEarnExperience: false } }, { new: true })
+                //     return
+                // }
     
                 await User.findOneAndUpdate({ discordId }, { $inc: { experience: randomXp }, $set: { canEarnExperience: false } }, { new: true })
-                
+                return
             } else { 
                 return
             }

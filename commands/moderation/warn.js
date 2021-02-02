@@ -39,6 +39,8 @@ module.exports = class WarnCommand extends Command {
                     const embed = embedStandard(`❗ The warn command adds infractions to the user's profile and allows staff to keep track of a user's bad behaviour.`).addField('Command Usage', `${prefix}warn [@user] [reason]`)
                     return message.channel.send(embed)
                 }
+
+                message.delete()
                 
                 const db = await User.findOne({ discordId: member.id })
 
@@ -51,9 +53,9 @@ module.exports = class WarnCommand extends Command {
                     date: Date.now()
                 }
 
-                await User.findOneAndUpdate({ discordId: member.id }, { $push: { infractions: warning } }, { new: true })
+                const updatedUser = await User.findOneAndUpdate({ discordId: member.id }, { $push: { infractions: warning } }, { new: true })
 
-                const embed = embedStandard(`❗ ${member}, you have been warned!`).addFields({ name: 'Reason', value: reason, inline: true }, { name: 'Staff Member', value: message.author, inline: true })
+                const embed = embedStandard(`❗ ${member}, you have been warned! You now have ${updatedUser.infractions.length} warnings.`).addFields({ name: 'Reason', value: reason, inline: true }, { name: 'Staff Member', value: message.author, inline: true })
                 return message.channel.send(embed)
             }
         } catch(error) {

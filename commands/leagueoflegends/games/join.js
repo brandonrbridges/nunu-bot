@@ -26,7 +26,7 @@ module.exports = class JoinCustomGameCommand extends Command {
     
             if(game) {
                 if(!game.players.includes(discordId)) {
-                    if(game.players.length <= 10) {
+                    if(game.players.length < 10) {
                         await CustomGame.findOneAndUpdate({ guildId: message.guild.id, isActive: true }, { $push: { players: discordId } }, { new: true })
                         game = await CustomGame.findOne({ guildId: message.guild.id, isActive: true }) 
 

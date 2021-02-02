@@ -26,7 +26,7 @@ module.exports = class LeaveCustomGameCommand extends Command {
             if(game) {
                 if(game.players.includes(message.author.id)) {
                     try {
-                        await CustomGame.findOneAndUpdate({ guildId: message.guild.id, isActive: true }, { $pull: { players: discordId } }, { new: true })
+                        await CustomGame.findOneAndUpdate({ guildId: message.guild.id, isActive: true }, { $pull: { players: discordId }, $set: { inProgress: false } }, { new: true })
                         game = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })
         
                         const embed = embedSuccess(`🕹️ ${message.author}, you have left the custom game!`).addFields({ name: 'In Lobby', value: game.players.length, inline: true }, { name: 'Remaining Spots', value: (10 - game.players.length), inline: true })

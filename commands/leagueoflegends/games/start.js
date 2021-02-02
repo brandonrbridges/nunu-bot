@@ -31,6 +31,7 @@ module.exports = class StartCustomGameCommand extends Command {
                 let game = await CustomGame.findOne({ guildId: message.guild.id, isActive: true })
     
                 if(game) {
+                    await CustomGame.findOneAndUpdate({ guildId: message.guild.id, isActive: true }, { $set: { inProgress: false, teamOne: [], teamTwo: [] } }, { new: true })
                     if(!game.inProgress) {
                         const players = game.players.sort(() => Math.random() - 0.5)
                         let teamOne = [], teamTwo = []
