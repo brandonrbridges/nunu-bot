@@ -7,8 +7,8 @@ module.exports = class PurgeCommand extends Command {
             args: [
                 {
                     id: 'amount',
-                    type: 'number'
-                }
+                    type: 'number'                                      
+                }                   
             ]
         })
     }
