@@ -1,7 +1,8 @@
 const { Listener } = require('discord-akairo')
 
 const { createUser } = require('../functions/database')
-const { addExperience, checkXp } = require('../functions/levelling')
+const { addExperience, checkXp, addToXpCache } = require('../functions/levelling')
+const { easterEggs } = require('../functions/eastereggs')
 const { 
     embedStandard,
     getAvatarUrl,
@@ -26,8 +27,8 @@ module.exports = class MessageListener extends Listener {
         // Add user to database
         createUser(message.author.id)
         
-        // Add experience for message sent
-        addExperience(message, message.author.id)
+        // Add experience for message send
+        addToXpCache(message.author.id,message.content)
 
         // Check user XP if to level up or not
         checkXp(message.author.id, message.guild, message.channel)
@@ -47,38 +48,6 @@ module.exports = class MessageListener extends Listener {
                 message.channel.send(embed)
             }
         }
-
-        // Shen
-        if(message.content.toLowerCase().includes('shen')) {
-            return message.react('<:shen:799765676054806548>')
-        }
-
-        // Pog
-        if(message.content.toLowerCase().includes('pog')) {
-            return message.react('<a:pogo:791278798049509406>')
-        }
-
-        // Tangerine
-        if(message.content.toLowerCase().includes('orange') || message.content.toLowerCase().includes('tangerine') || message.content.toLowerCase().includes('trial mod') || message.content.toLowerCase().includes('trial admin')) {
-            return message.react('🍊')
-        }
-
-        // Jess approves
-        if(message.author.id === '165134266659766272' && message.content === 'https://tenor.com/view/tohru-kobayashisan-chi-no-maid-dragon-dragon-maid-thumbs-up-gif-12390446') {
-            const embed = embedStandard(`✅ Jess approves!`)
-            return message.channel.send(embed)
-        }
-
-        // Igni memes
-        if(message.author.id === '513048504487378964' && message.content.toLowerCase() === 'guys im gonna only ask once' && message.channel.name !== 'memes') {
-            const embed = embedStandard(`${message.author} has spoken! Keep memes out of ${message.channel}!`)
-            return message.channel.send(embed)
-        }
-
-        // Luis inting
-        if(message.author.id === '334107033831735308' && message.content.toLowerCase().includes('play a game')) {
-            const embed = embedStandard('Willump: Oh no, inting time!\nNunu: *grunts*')
-            return message.channel.send(embed)
-        }
+        easterEggs(message)
     }
 }
