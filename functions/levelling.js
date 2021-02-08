@@ -41,6 +41,8 @@ const removeXp = async (discordId,content) => {
         } else { 
             return
         }
+    } catch(error) {
+        return console.error
     }
 }
 
