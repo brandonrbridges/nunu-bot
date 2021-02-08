@@ -11,6 +11,9 @@ const {
     getAvatarUrl
 } = require('../../functions/helpers')
 
+// Levels
+const { levels } = require('../../database/levels')
+
 // Image Manipulations
 const jimp = require('jimp')
 

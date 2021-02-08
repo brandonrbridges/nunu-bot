@@ -15,7 +15,7 @@ module.exports = class HelpCommand extends Command {
     }
 
     exec(message, { category }) {
-        if(category){category = category.toLowerCase()}
+        category = category.toLowerCase()
         
         if(!category) {
             const embed = embedStandard(`❓ You need help? Find a list of our categories below! Usage: ${prefix}help {category}.`).addField('Categories', 'custom\nutility')

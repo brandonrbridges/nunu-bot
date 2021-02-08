@@ -7,20 +7,18 @@ const mongoose = require('mongoose')
 const cron = require('node-cron')
 
 const { resetDailies } = require('./functions/currency')
-
-const { applyExperience } = require('./functions/levelling')
 const { resetExperienceGain } = require('./functions/levelling')
 const { embedStandard } = require('./functions/helpers')
 
 const CustomGame = require('./database/schema/customgame')
 
-prefix = '!!'
+prefix = '!'
 
 class Client extends AkairoClient {
     constructor() {
         super({
             // Akairo Settings
-            ownerID: ['261921089964212246'],
+            ownerID: ['471841188341743616'],
         }, {
             // Discord.js Settings
             disableMentions: 'everyone'
@@ -85,10 +83,11 @@ cron.schedule('0 0 * * *', () => {
 /**
  * Cron Job
  * 
- * @description Runs every minute to apply users' xp
+ * @description Runs every minute to check if the user has sent a message and gained XP
  */
-cron.schedule('* * * * *', () => {    
-    applyExperience()
+cron.schedule('* * * * *', () => {
+    // Resets the ability to gain XP to true
+    resetExperienceGain()
 })
 
 /**
@@ -98,7 +97,7 @@ cron.schedule('* * * * *', () => {
  */
 cron.schedule('55 18 * * *', () => {
 
-    const guild = client.guilds.cache.get(process.env.GUILD)
+    const guild = client.guilds.cache.get('788731111845003294')
     const channel = guild.channels.cache.find(channel => channel.name == 'general')
     const role = guild.roles.cache.find(role => role.name == 'Custom Games')
 
@@ -110,7 +109,7 @@ cron.schedule('55 18 * * *', () => {
 
 cron.schedule('00 19 * * *', () => {
 
-    const guild = client.guilds.cache.get(process.env.GUILD)
+    const guild = client.guilds.cache.get('788731111845003294')
     const channel = guild.channels.cache.find(channel => channel.name == 'general')
     const role = guild.roles.cache.find(role => role.name == 'Custom Games')
 

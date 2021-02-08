@@ -50,7 +50,7 @@ const schema = new mongoose.Schema({
         default: 0,
         type: Number
     },
-    xpCache: {
+    lifetimeExperience: {
         default: 0,
         type: Number
     },
