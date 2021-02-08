@@ -7,7 +7,7 @@ const { MessageEmbed } = require('discord.js')
 module.exports = class NotificationsCommand extends Command {
     constructor() {
         super('notifications', {
-            aliases: ['notifications', 'notifyme', 'notify'],
+            aliases: ['notifications', 'notify'],
             args: [
                 {
                     id: 'type',
@@ -28,8 +28,12 @@ module.exports = class NotificationsCommand extends Command {
                 description: 'The Notifications command will grant you a role in which you wish to be notified for something. E.g. Custom Games',
                 fields: [
                     {
-                        name: `${prefix}notifications games`,
+                        name: `${prefix}notify customs`,
                         value: 'Receive a notification when Custom Games are being hosted'
+                    },
+                    {
+                        name: `${prefix}notify tournaments`,
+                        value: 'Receive a notification when Tournaments are being hosted'
                     }
                 ],
                 footer: {
@@ -43,7 +47,7 @@ module.exports = class NotificationsCommand extends Command {
         }
 
         // Check type argument
-        if(args.type === 'games') {
+        if(args.type === 'customs') {
             // Find appropriate role
             const role = message.guild.roles.cache.find(role => role.name === 'Custom Games')
             
@@ -60,6 +64,34 @@ module.exports = class NotificationsCommand extends Command {
             const embed = new MessageEmbed({
                 color: '#0be881',
                 description: `${message.author}, you now have the ${role} role!\nYou will now be notified when a new Custom Game is being started.`,
+                footer: {
+                    iconURL: getAvatarUrl(client.user),
+                    text: client.user.username
+                }
+            }).setTimestamp()
+
+            // Send embed
+            return message.channel.send(embed)
+        }
+
+        // Check type argument
+        if(args.type === 'tournaments') {
+            // Find appropriate role
+            const role = message.guild.roles.cache.find(role => role.name === 'Tournaments')
+            
+            // Add role to member
+            message.member.roles.add(role)
+            .then(x => {
+                console.log(x)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+
+            // Create embed
+            const embed = new MessageEmbed({
+                color: '#0be881',
+                description: `${message.author}, you now have the ${role} role!\nYou will now be notified when a new Tournament is being started.`,
                 footer: {
                     iconURL: getAvatarUrl(client.user),
                     text: client.user.username

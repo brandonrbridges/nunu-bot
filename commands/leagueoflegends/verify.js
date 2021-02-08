@@ -30,7 +30,7 @@ module.exports = class VerifyCommand extends Command {
     }
 }
 
-const apiKey = 'RGAPI-82a71efb-8fe4-45b9-ae30-6c11562bf146'
+const apiKey = 'RGAPI-80fc6a46-c9bd-4829-9291-9fa4ad2a9e8d'
 
 const kayn = Kayn(apiKey)({
     region: 'euw',
@@ -164,7 +164,7 @@ const verify = async (message, summonerName) => {
                 return message.channel.send(embed)
             }
 
-        }, 30000)
+        }, 60000)
     } catch(error) {
         const embed = embedConsoleError(error)
         return message.channel.send(embed)

@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const { AkairoClient, CommandHandler, ListenerHandler } = require('discord-akairo')
+const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } = require('discord-akairo')
 
 const mongoose = require('mongoose')
 
@@ -25,13 +25,25 @@ class Client extends AkairoClient {
         })
 
         /**
-         * Command Handlers
+         * Command Handler
          */
 
         this.commands = new CommandHandler(this, {
             directory: './commands/',
             prefix: prefix
-        }).loadAll()
+        })
+
+        /**
+         * Inhibitor Handler
+         */
+
+        this.inhibitors = new InhibitorHandler(this, {
+            directory: './inhibitors/',
+        })
+
+        this.commands.useInhibitorHandler(this.inhibitors)
+        this.inhibitors.loadAll()
+        this.commands.loadAll()
 
         /**
          * Listener Handler
