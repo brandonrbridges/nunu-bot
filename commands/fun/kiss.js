@@ -12,7 +12,7 @@ module.exports = class KissCommand extends Command {
             args: [
                 {
                     id: 'member',
-                    type: 'memberMention',
+                    type: 'banana',
                     prompt: {
                         start: 'who would you like to kiss?'
                     }
