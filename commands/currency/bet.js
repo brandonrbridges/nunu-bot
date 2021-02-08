@@ -19,7 +19,7 @@ module.exports = class BetCommand extends Command {
             args: [
                 {
                     id: 'amount',
-                    type: 'number',
+                    type: 'string',
                 }
             ]
         })
@@ -31,10 +31,16 @@ module.exports = class BetCommand extends Command {
             let  user = await User.findOne({ discordId })
     
             if(user) {
+                if(amount == 'all') {
+                    amount = user.gold
+                } else {
+                    amount = parseInt(amount)
+                    amount = Math.round(amount)   
+                }
                 amount = Math.round(amount)
                 if(amount > 0) {
                     if(user.gold >= amount) {
-                        if(amount <= Math.round((user.gold / 5))) {
+                        if(amount < Math.round((user.gold / 5))) {
                             const embed = embedError(`${message.author}, please bet ${Math.round((user.gold / 5))} Gold or higher.`).addField('Why?', 'To prevent Gold boosting, and playing the lower chances, you have to bet at least 20% of your current balance.')
                             return message.channel.send(embed)
                         }

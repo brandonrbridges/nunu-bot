@@ -9,6 +9,7 @@ const { embedSuccess } = require('./helpers')
  * 
  * @version 1.1.0
  */
+
 const addToXpCache = async (discordId,content) => {
     try {
         const user = await User.findOne({ discordId })
@@ -40,10 +41,10 @@ const removeXp = async (discordId,content) => {
         } else { 
             return
         }
-    } catch(error) {
-        return console.error(error) 
     }
 }
+
+
 
 /**
  * Check XP

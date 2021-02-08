@@ -35,7 +35,7 @@ module.exports = class DailyCommand extends Command {
                     return message.channel.send(embed)
                 } else {
                     await User.findOneAndUpdate({ discordId }, { $inc: { gold: 500 }, $set: { hasUsedDaily: true } }, { new: true })
-                    const embed = embedSuccess(`💰 ${message.author}, you have received 500 Gold!`).addField('💡 Did you know?', `If you Nitro Boost this server, when you use ${prefix}daily, you will gain **an additional ${formatNumber(1000)} and 200 Blue Essence**?`)
+                    const embed = embedSuccess(`💰 ${message.author}, you have received 500 Gold!`).addField('💡 Did you know?', `If you Nitro Boost this server, when you use ${prefix}daily, you will gain **an additional ${formatNumber(1000)} Gold and 200 Blue Essence**?`)
                     return message.channel.send(embed)
                 }
             } else {

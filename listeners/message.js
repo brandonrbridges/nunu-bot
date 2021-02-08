@@ -27,7 +27,7 @@ module.exports = class MessageListener extends Listener {
         // Add user to database
         createUser(message.author.id)
         
-        // Add experience for message sent
+        // Add experience for message send
         addToXpCache(message.author.id,message.content)
 
         // Check user XP if to level up or not

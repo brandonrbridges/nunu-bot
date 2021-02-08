@@ -3,10 +3,6 @@ const { Command } = require('discord-akairo')
 
 // Functions
 const {
-    
-} = require('../../functions/moderation')
-
-const {
     checkPermissions,
     embedConsoleError,
     embedError,
