@@ -8,15 +8,17 @@ const cron = require('node-cron')
 
 const { resetDailies } = require('./functions/currency')
 
+const { applyExperience } = require('./functions/levelling')
+
 const CustomGame = require('./database/schema/customgame')
 
-prefix = '!'
+prefix = '!!'
 
 class Client extends AkairoClient {
     constructor() {
         super({
             // Akairo Settings
-            ownerID: ['471841188341743616'],
+            ownerID: ['261921089964212246'],
         }, {
             // Discord.js Settings
             disableMentions: 'everyone'
@@ -69,11 +71,20 @@ cron.schedule('0 0 * * *', () => {
 /**
  * Cron Job
  * 
+ * @description Runs every minute to apply users' xp
+ */
+cron.schedule('* * * * *', () => {    
+    applyExperience()
+})
+
+/**
+ * Cron Job
+ * 
  * @description Runs at 7pm everyday and creates a server wide custom game
  */
 cron.schedule('55 18 * * *', () => {
 
-    const guild = client.guilds.cache.get('788731111845003294')
+    const guild = client.guilds.cache.get(process.env.GUILD)
     const channel = guild.channels.cache.find(channel => channel.name == 'general')
     const role = guild.roles.cache.find(role => role.name == 'Custom Games')
 
@@ -85,7 +96,7 @@ cron.schedule('55 18 * * *', () => {
 
 cron.schedule('00 19 * * *', () => {
 
-    const guild = client.guilds.cache.get('788731111845003294')
+    const guild = client.guilds.cache.get(process.env.GUILD)
     const channel = guild.channels.cache.find(channel => channel.name == 'general')
     const role = guild.roles.cache.find(role => role.name == 'Custom Games')
 
